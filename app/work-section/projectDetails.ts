@@ -3,8 +3,10 @@ export type ProjectProps = {
   name: string;
   description: string;
   technologies: string[];
-  github: string;
-  demo: string;
+  github: string | null;
+  apk: string | null;
+  ios: string | null;
+  demo: string | null;
   image: string;
   available: boolean;
 };
@@ -12,70 +14,56 @@ export type ProjectProps = {
 export const devProjects = [
   {
     id: 0,
-    name: "Flixify",
+    name: "PICH",
     description:
-      "Flixify lets you seamlessly explore movies and TV series, add bookmarks, and search across all pages. It offers user authentication along with a theme switch.",
-    technologies: ["Next.js", "Typescript", "Prisma"],
-    github: "https://github.com/victorcodess/flixify",
-    demo: "https://flixify.victorwilliams.me/",
-    image: require(".//../../public/projects/flixify.png"),
+    "Virtual fruit marketplace connecting users and vendors, promoting healthy eating and fostering a supportive community.",
+    technologies: ["Flutter", "Laravel", "Firebase"],
+    github: "https://github.com/yamas-developers/pich_app.git",
+    apk: null,
+    ios: null,
+    demo: "https://pich.dodson-development.com/admin",
+    image: require(".//../../public/projects/pich.png"),
     available: true,
   },
   {
     id: 1,
-    name: "SkyWatch",
+    name: "Butler",
     description:
-      "SkyWatch is a convenient and user-friendly tool that allows you to quickly and easily check the current weather and forecast for the next 2 days in any city.",
-    technologies: ["React", "CSS", "Chart.js"],
-    github: "https://github.com/victorcodess/weather-forecast-website",
-    demo: "https://sky-watch.vercel.app/",
-    image: require(".//../../public/projects/skywatch-new.webp"),
+      "Convenient online cleaning services solution. Users request specific services, receive proposals from cleaners, chat, book recurring sessions, and provide feedback.",
+    technologies: ["Flutter", "Laravel", "Firebase"],
+    github: null,
+    apk: "https://drive.google.com/file/d/1SN3QA4WuknhbdnNdoTww3WBCBKI9vxFQ/view",
+    ios: null,
+    demo: "https://butlerapp.co",
+    image: require(".//../../public/projects/butler.png"),
     available: true,
   },
   {
     id: 2,
-    name: "Alpaca Image Generator",
+    name: "Salamly",
     description:
-      "An image generator website that allows users to generate, combine, and download images.",
-    technologies: ["React", "CSS", "Merge Images"],
-    github: "https://github.com/victorcodess/alpaca-image-generator",
-    demo: "http://alpaca-image-generator-beta.vercel.app",
-    image: require(".//../../public/projects/alpaca-new.webp"),
+      "Islamic social media app for seamless socialization. Users share posts, stories, statuses, chat, video/audio call, react, follow like-minded individuals, and discover nearby interesting people.",
+    technologies: ["Flutter", "Laravel", "Wordpress"],
+    github: null,
+    apk: "https://play.google.com/store/apps/details?id=com.salamgram.salamgram&pcampaignid=web_share",
+    ios: "https://apps.apple.com/pk/app/salamly-ramadan-2024/id1612064624",
+    demo: "http://salamgram.com",
+    image: require(".//../../public/projects/salamly.png"),
     available: true,
   },
   {
     id: 3,
-    name: "Link Shortener",
+    name: "Absher",
     description:
-      "A website that reduces the length of your URL using Bit.ly's API",
-    technologies: ["JavaScript", "CSS", "Bit.ly's API"],
-    github: "https://github.com/victorcodess/url-shortener",
-    demo: "https://url-shortener-nine-delta.vercel.app",
-    image: require(".//../../public/projects/shortener-new.webp"),
+      "Versatile online platform for food, grocery, medicine delivery, home/auto services. Users can chat, track orders, and connect with vendors.",
+    technologies: ["Flutter", "Laravel", "Firebase"],
+    github: null,
+    apk: "https://drive.google.com/file/d/1XqjGMyK88yjJ4qXVoaszJGmuz-AW2mYC/view?usp=sharing",
+    ios: null,
+    demo: "https://drive.google.com/file/d/1o0HlRL54MSbWohTB16xXq-G0mJ7hmWsG/view?usp=sharing",
+    image: require(".//../../public/projects/absher.png"),
     available: true,
   },
-  // {
-  //   id: 4,
-  //   name: "Carpooling Service",
-  //   description:
-  //     "TMTM helps Covenant University students find fellow students who are headed to the same location, so they can share a ride and split the cost.",
-  //   technologies: ["Material UI", "React", "Formik"],
-  //   github: "https://github.com/victorcodess/carpooling-service",
-  //   demo: "",
-  //   image: require(".//../../public/projects/carpool-new.webp"),
-  //   available: false,
-  // },
-  // {
-  //   id: 5,
-  //   name: "MLSC.ng",
-  //   description:
-  //     "This is platform for Microsoft Learn Student Ambassadors to shorten links, append their sharing IDs and generate event certificates.",
-  //   technologies: ["Next.js", "Next Auth", "Tailwind CSS"],
-  //   github: "https://github.com/msp-nigeria/mlsc.ng-frontend",
-  //   demo: "",
-  //   image: require(".//../../public/projects/mlsc.png"),
-  //   available: false,
-  // },
 ];
 
 export const designProjects = [

@@ -11,11 +11,11 @@ const syne = Syne({
 });
 
 export const metadata: Metadata = {
-  title: "Victor Williams — Frontend Engineer",
+  title: "Muhammad Khizr — Flutter Developer | Full Stack Developer | Freelancer",
   description:
-    "Frontend Engineer and Product Designer, currently at Crown Branding Agency. Focused on interfaces and experiences, working remotely from Lagos, Nigeria.",
+    "Flutter Developer | Full Stack Developer | Freelancer. Focused on interfaces and experiences, working remotely from Pakistan.",
   generator: "Next.js",
-  applicationName: "Victor Williams",
+  applicationName: "Muhammad Khizr",
   keywords: [
     "freelance",
     "developer",
@@ -37,33 +37,33 @@ export const metadata: Metadata = {
   ],
   colorScheme: "dark",
   openGraph: {
-    title: "Victor Williams — Frontend Engineer",
+    title: "Muhammad Khizr — Flutter Developer | Full Stack Developer | Freelancer",
     description:
-      "Frontend Engineer and Product Designer, currently at Crown Branding Agency. Focused on interfaces and experiences, working remotely from Lagos, Nigeria.",
-    url: "https://www.victorwilliams.me/",
-    siteName: "www.victorwilliams.me",
+      "Flutter Developer | Full Stack Developer | Freelancer. Focused on interfaces and experiences, working remotely from Pakistan.",
+    url: "https://www.khizr.net/",
+    siteName: "www.khizr.net",
     images: [
       {
         url: "https://user-images.githubusercontent.com/84178696/228620835-e3cc5c9b-72fc-4f54-a628-407ef7b650f5.png",
         width: 1200,
         height: 630,
-        alt: "Victor Williams — Frontend Engineer",
+        alt: "Muhammad Khizr — Flutter Developer | Full Stack Developer | Freelancer",
       },
     ],
     locale: "en-US",
     type: "website",
   },
-  twitter: {
-    card: "summary_large_image",
-    title: "Victor Williams — Frontend Engineer",
-    description:
-      "Frontend Engineer and Product Designer, currently at Crown Branding Agency. Focused on interfaces and experiences, working remotely from Lagos, Nigeria.",
-    creator: "victorwill__",
-    creatorId: "1243720976552144897",
-    images: [
-      "https://user-images.githubusercontent.com/84178696/228620835-e3cc5c9b-72fc-4f54-a628-407ef7b650f5.png",
-    ],
-  },
+  // twitter: {
+  //   card: "summary_large_image",
+  //   title: "Muhammad Khizr — Flutter Developer | Full Stack Developer | Freelancer",
+  //   description:
+  //     "Flutter Developer | Full Stack Developer | Freelancer. Focused on interfaces and experiences, working remotely from Pakistan.",
+  //   creator: "khizr__",
+  //   creatorId: "1243720976552144897",
+  //   images: [
+  //     "https://user-images.githubusercontent.com/84178696/228620835-e3cc5c9b-72fc-4f54-a628-407ef7b650f5.png",
+  //   ],
+  // },
   robots: {
     index: true,
     follow: true,

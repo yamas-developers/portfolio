@@ -4,7 +4,7 @@ import { monaSans } from "../fonts/monaSans";
 import { motion } from "framer-motion";
 import { imageAnimation, bodyAnimation } from "../animations/animations";
 import AnimatedWords from "../animations/AnimatedWords";
-import profile from "../../public/profile.webp";
+import profile from "../../public/profile.jpg";
 
 const Hero = () => {
   return (
@@ -19,7 +19,7 @@ const Hero = () => {
       <div className="absolute top-10 flex justify-between sm:w-[90%] lg:max-w-[1440px]">
         <div>
           <Link
-            href="https://drive.google.com/file/d/1Mmwl-FRGPm5QVe3AjtukJr_Jpc366Ear/view"
+            href="https://drive.google.com/file/d/1WBh7T-oZSLhbou-0oByqseM0a8Y1qqj3/view"
             target="_blank"
             aria-label="View Resume"
           >
@@ -34,7 +34,7 @@ const Hero = () => {
 
         <div className="flex gap-10 text-[#e4ded7] sm:gap-12 md:gap-14 lg:gap-14">
           <Link
-            href="https://github.com/victorcodess"
+            href="https://github.com/yamas-developers"
             target="_blank"
             aria-label="View GitHub Profile"
           >
@@ -46,7 +46,7 @@ const Hero = () => {
             </motion.p>
           </Link>
           <Link
-            href="https://www.linkedin.com/in/victor-williams-chukwudi/"
+            href="https://www.linkedin.com/in/muhamad-khizr/"
             target="_blank"
             aria-label="View LinkedIn Profile"
           >
@@ -57,8 +57,8 @@ const Hero = () => {
               LN
             </motion.p>
           </Link>
-          <Link
-            href="https://twitter.com/victorwill__"
+          {/* <Link
+            href=""
             target="_blank"
             aria-label="View Twitter Profile"
           >
@@ -68,16 +68,16 @@ const Hero = () => {
             >
               TW
             </motion.p>
-          </Link>
+          </Link> */}
         </div>
       </div>
 
-      <div className="-mt-36 flex flex-col items-center justify-center sm:-mt-20 lg:my-40 lg:-mt-2 lg:py-40 ">
+      <div className="-mt-36 flex flex-col items-center justify-center sm:-mt-20 lg:my-40 lg:-mt-2 lg:py-30 ">
         <div
           className={`relative flex flex-col items-center justify-center ${monaSans.className}   `}
         >
           <AnimatedWords
-            title="VICTOR WILLIAMS"
+            title="MUHAMMAD KHIZR"
             style="inline-block overflow-hidden pt-1 -mr-4 sm:-mr-5 md:-mr-7 lg:-mr-9 -mb-1 sm:-mb-2 md:-mb-3 lg:-mb-4"
           />
           <motion.div
@@ -87,7 +87,7 @@ const Hero = () => {
             <Image
               src={profile}
               priority
-              alt="Victor's headshot"
+              alt="Khizr's headshot"
               data-blobity-tooltip="Fine boy"
               data-blobity-invert="false"
               className=" w-[150px] rounded-[16px] grayscale hover:grayscale-0 md:w-[200px] md:rounded-[32px] lg:w-[245px]"
@@ -106,7 +106,8 @@ const Hero = () => {
           variants={bodyAnimation}
         >
           <p className="z-50 text-center text-[16px] font-medium text-[#e4ded7] md:text-[20px] lg:text-left">
-            Frontend Engineer and Product Designer, prev at{" "}
+            Software Developer and Product Designer, currently available for work.
+            {/* prev at{" "}
             <Link
               href="https://www.mono.co/"
               target="_blank"
@@ -114,7 +115,8 @@ const Hero = () => {
               aria-label="Crown Branding Agency Website"
             >
               Mono,
-            </Link> currently available for work.
+            </Link>  */}
+             {/* currently available for work. */}
           </p>
         </motion.div>
 
@@ -123,8 +125,7 @@ const Hero = () => {
           variants={bodyAnimation}
         >
           <p className="text-right text-[16px] font-semibold text-[#e4ded7] md:text-[20px]">
-            Focused on interfaces and experiences, working remotely from Lagos,
-            Nigeria.
+            Focused on interfaces and experiences, working remotely from Pakistan.
           </p>
         </motion.div>
       </div>

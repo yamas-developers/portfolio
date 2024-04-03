@@ -7,6 +7,7 @@ import AnimatedTitle from "../animations/AnimatedTitle";
 import AnimatedWords2 from "../animations/AnimatedWords2";
 import { motion } from "framer-motion";
 import heartIcon from "../../public/heart icon.png";
+import { imageAnimation, bodyAnimation } from "../animations/animations";
 
 const Contact = () => {
   return (
@@ -42,20 +43,12 @@ const Contact = () => {
               className={
                 "-mb-1 inline-block overflow-hidden pt-1 sm:-mb-2 md:-mb-3 lg:-mb-4"
               }
-            />
-            <Link
-              href="mailto:victor.williams@stu.cu.edu.ng?subject=Lets%20work%20together!&amp;body=Hello%2C%20I%20think%20we%20need%20you%20to%20work%20on%2Fcollaborate%20this%20particular%20product...%20Reach%20out%20as%20soon%20as%20you%20can."
-              target="_blank"
-              aria-label="Send me an email"
-              className="mt-1 w-[147px] flex-1 underline underline-offset-2 hover:no-underline sm:mt-2 sm:w-[147px] md:mt-3 md:w-[170px] lg:mt-4"
-            >
-              <AnimatedBody text={"Send me an email"} className={""} />
-            </Link>
+            />  
           </div>
 
           <div className="flex gap-10 text-[16px] font-bold text-[#e4ded7]  sm:gap-14 sm:text-[24px] md:gap-10 md:text-[16px] lg:gap-20 lg:text-[28px]">
             <Link
-              href="https://github.com/victorcodess"
+              href="https://github.com/yamas-developers"
               target="_blank"
               aria-label="View GitHub Profile"
             >
@@ -69,7 +62,7 @@ const Contact = () => {
               />
             </Link>
             <Link
-              href="https://www.linkedin.com/in/victor-williams-chukwudi/"
+              href="https://www.linkedin.com/in/muhamad-khizr/"
               target="_blank"
               aria-label="View LinkedIn Profile"
             >
@@ -82,8 +75,8 @@ const Contact = () => {
                 charSpace={"mr-[0.01em]"}
               />
             </Link>
-            <Link
-              href="https://twitter.com/victorwill__"
+            {/* <Link
+              href=""
               target="_blank"
               aria-label="View Twitter Profile"
             >
@@ -95,9 +88,9 @@ const Contact = () => {
                 wordSpace={"mr-[0.25em]"}
                 charSpace={"mr-[0.01em]"}
               />
-            </Link>
-            <Link
-              href="https://www.instagram.com/victorwill__/"
+            </Link> */}
+            {/* <Link
+              href=""
               target="_blank"
               aria-label="View Instagram Profile"
             >
@@ -109,9 +102,9 @@ const Contact = () => {
                 wordSpace={"mr-[0.25em]"}
                 charSpace={"mr-[0.01em]"}
               />
-            </Link>
-            <Link
-              href="https://blog.victorwilliams.me/"
+            </Link> */}
+            {/* <Link
+              href=""
               target="_blank"
               aria-label="View Hashnode Profile"
             >
@@ -123,8 +116,32 @@ const Contact = () => {
                 wordSpace={"mr-[0.25em]"}
                 charSpace={"mr-[0.01em]"}
               />
+            </Link> */}
+          </div>
+        </div>
+       
+        <div className="mt-20 flex w-full flex-col items-center justify-center gap-16 sm:mt-32 sm:gap-12 md:mt-40 md:flex-row lg:mt-12 lg:max-w-[1440px]">
+          <div className=" flex w-[350px] max-w-[90%] flex-col items-center justify-center text-right text-[14px] font-semibold uppercase text-[#e4ded7] sm:w-[350px] sm:text-[14px] md:w-[310px] md:text-[16px] lg:w-[420px] lg:text-[16px]">
+          <Link
+              href="mailto:muhamad.khizr@gmail.com?subject=Lets%20work%20together!&amp;body=Hello%2C%20I%20think%20we%20need%20you%20to%20work%20on%2Fcollaborate%20this%20particular%20product...%20Reach%20out%20as%20soon%20as%20you%20can."
+              target="_blank"
+              aria-label="Send Me an Email"
+              className="mt-1 w-[200px] flex-1 hover:no-underline sm:mt-2 sm:w-[147px] md:mt-3 md:w-[200px] lg:mt-4"
+              style={{
+                width: '-webkit-max-content',
+              }}
+            >
+              {/* <AnimatedBody text={"Send me an email"} className={""} /> */}
+              <motion.button
+              className="hidden rounded-md border-2 border-[#e4ded7] py-2 px-4 text-[20px] font-bold text-black bg-white sm:block md:text-[20px] lg:block"
+              variants={bodyAnimation}
+              style={{ color: 'black', width: '-webkit-max-content', marginTop: '0rem', marginBottom: '0rem'}}
+            >
+              Send me an email
+            </motion.button>
             </Link>
           </div>
+
         </div>
       </div>
     </motion.section>

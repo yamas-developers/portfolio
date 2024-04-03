@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLink } from "@fortawesome/free-solid-svg-icons";
-import { faGithub } from "@fortawesome/free-brands-svg-icons";
+import { faAndroid, faApple, faGithub } from "@fortawesome/free-brands-svg-icons";
 import { ProjectProps } from "./projectDetails";
 import Link from "next/link";
 import Image from "next/image";
@@ -14,6 +14,8 @@ const ProjectCard = ({
   description,
   technologies,
   github,
+  apk,
+  ios,
   demo,
   image,
   available,
@@ -47,6 +49,7 @@ const ProjectCard = ({
       >
         {available ? (
           <>
+          {github && 
             <Link
               href={github}
               target="_blank"
@@ -62,8 +65,8 @@ const ProjectCard = ({
                 data-blobity-offset-y="4"
                 data-blobity-magnetic="true"
               />
-            </Link>
-            <Link href={demo} target="_blank" aria-label="Open Live Demo">
+            </Link>}
+            {demo && <Link href={demo} target="_blank" aria-label="Open Live Demo">
               <FontAwesomeIcon
                 icon={faLink}
                 className=" w-[20px] rounded-full bg-white p-5 text-[20px] md:w-[25px] md:text-[24px] lg:w-[30px] lg:text-[28px]"
@@ -73,11 +76,34 @@ const ProjectCard = ({
                 data-blobity-offset-y="4"
                 data-blobity-magnetic="trues"
               />
+            </Link>}
+            {apk && <Link href={apk} target="_blank" aria-label="Open Live Demo">
+              <FontAwesomeIcon
+                icon={faAndroid}
+                className=" w-[20px] rounded-full bg-white p-5 text-[20px] md:w-[25px] md:text-[24px] lg:w-[30px] lg:text-[28px]"
+                data-blobity
+                data-blobity-radius="38"
+                data-blobity-offset-x="4"
+                data-blobity-offset-y="4"
+                data-blobity-magnetic="trues"
+              />
+            </Link>}
+            {ios && <Link href={ios} target="_blank" aria-label="Open Live Demo">
+              <FontAwesomeIcon
+                icon={faApple}
+                className=" w-[20px] rounded-full bg-white p-5 text-[20px] md:w-[25px] md:text-[24px] lg:w-[30px] lg:text-[28px]"
+                data-blobity
+                data-blobity-radius="38"
+                data-blobity-offset-x="4"
+                data-blobity-offset-y="4"
+                data-blobity-magnetic="trues"
+              />
             </Link>
+            }
           </>
         ) : (
           <div className=" flex items-center justify-center gap-4">
-            <Link
+           {github && <Link
               href={github}
               target="_blank"
               className="mt-1 rounded-full"
@@ -92,7 +118,7 @@ const ProjectCard = ({
                 data-blobity-offset-y="4"
                 data-blobity-magnetic="true"
               />
-            </Link>
+            </Link>}
             <div className=" rounded-xl bg-white px-4 py-2 md:px-5 md:py-3 lg:px-6 lg:py-4">
               <h3 className="text-[16px] md:text-[18px] lg:text-[20px] ">
                 Coming soon

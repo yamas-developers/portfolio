@@ -12,7 +12,7 @@ export const blogDetails = [
     image:
       "https://cdn.hashnode.com/res/hashnode/image/upload/v1672494063925/1ee2925f-e529-4a8b-9dd7-6eea996a34eb.png",
     date: "DEC 2022",
-    url: "https://blog.victorwilliams.me/reflecting-on-my-18th-year-a-personal-review-of-2022",
+    url: "",
     available: true,
   },
   {
@@ -20,7 +20,7 @@ export const blogDetails = [
     image:
       "https://cdn.hashnode.com/res/hashnode/image/upload/v1704146853987/5e5ffc0f-9d20-4cc8-ad94-00ec737ba0f5.jpeg",
     date: "JAN 2024",
-    url: "https://blog.victorwilliams.me/2023-a-year-in-review",
+    url: "",
     available: true,
   },
   // {
