@@ -38,7 +38,7 @@ const ProjectCard = ({
       <Image
         src={image}
         alt={name}
-        className={`absolute -bottom-2 w-[70%] sm:w-[85%] md:w-[60%] lg:max-w-[55%] ${
+        className={`absolute mb-2 -bottom-2 w-[70%] sm:w-[85%] md:w-[60%] lg:max-w-[55%] ${
           id % 2 === 0 ? "right-0" : "left-0"
         }`}
       />
@@ -145,14 +145,14 @@ const ProjectCard = ({
         <AnimatedBody
           text={description}
           className={
-            "mt-4 w-[90%] max-w-[457px] text-[16px] font-semibold text-[#95979D] "
+            "mt-4 w-[90%] max-w-[457px] text-[15px] font-semibold text-[#95979D] "
           }
         />
         <div className="mt-9 flex gap-4">
           {technologies.map((tech, id) => (
             <AnimatedTitle
               text={tech}
-              wordSpace={"mr-[0.25em]"}
+              wordSpace={"mr-[0.2em]"}
               charSpace={"mr-[0.01em]"}
               key={id}
               className={

@@ -16,7 +16,7 @@ const Hero = () => {
     >
       <motion.div className="absolute left-0 top-0 right-0 bottom-0 h-full w-full bg-[#0E1016] mix-blend-color"></motion.div>
 
-      <div className="absolute top-10 flex justify-between sm:w-[90%] lg:max-w-[1440px]">
+      <div className="absolute top-10 flex justify-between cw-[90%] lg:max-w-[1440px]">
         <div>
           <Link
             href="https://docs.google.com/document/d/1E2_jcAz_NKCHMYEzyoomG8Nwh7kO4LyjIIPMu3kVAAs/edit?usp=sharing"
@@ -24,7 +24,7 @@ const Hero = () => {
             aria-label="View Resume"
           >
             <motion.button
-              className="hidden rounded-md border-2 border-[#e4ded7] py-2 px-4 text-[14px] font-semibold text-[#e4ded7] sm:block  md:text-[16px] lg:block"
+              className="rounded-md border-2 border-[#e4ded7] py-2 px-4 text-[14px] font-semibold text-[#e4ded7] sm:block  md:text-[16px] lg:block"
               variants={bodyAnimation}
             >
               VIEW RESUME
@@ -81,7 +81,7 @@ const Hero = () => {
             style="inline-block overflow-hidden pt-1 -mr-4 sm:-mr-5 md:-mr-7 lg:-mr-9 -mb-1 sm:-mb-2 md:-mb-3 lg:-mb-4"
           />
           <motion.div
-            className="absolute bottom-[-110px] mx-auto sm:bottom-[-100px] md:bottom-[-130px] lg:bottom-[-150px]"
+            className="absolute bottom-[-150px] mx-auto sm:bottom-[-120px] md:bottom-[-150px] lg:bottom-[-170px]"
             variants={imageAnimation}
           >
             <Image

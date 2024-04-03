@@ -37,8 +37,8 @@ const Contact = () => {
           />
         </div>
 
-        <div className="mt-20 flex w-full flex-col items-end justify-center gap-16 sm:mt-32 sm:gap-12 md:mt-40 md:flex-row md:items-start md:justify-between lg:mt-12 lg:max-w-[1440px]">
-          <div className=" flex w-[350px] max-w-[90%] flex-col items-end text-right text-[14px] font-semibold uppercase text-[#e4ded7] sm:w-[350px] sm:text-[14px] md:w-[310px] md:items-start md:text-left md:text-[16px] lg:w-[420px] lg:text-[16px]">
+        <div className="mt-20 flex w-full flex-col items-center justify-center gap-16 sm:mt-32 sm:gap-12 md:mt-40 md:flex-row md:items-start md:justify-between lg:mt-12 lg:max-w-[1440px]">
+          <div className=" flex w-[350px] max-w-[90%] flex-col items-center text-center text-[14px] font-semibold uppercase text-[#e4ded7] sm:w-[350px] sm:text-[14px] md:w-[310px] md:items-start md:text-left md:text-[16px] lg:w-[420px] lg:text-[16px]">
             <AnimatedBody
               text={
                 "Got a question, proposal, project, or want to work together on something?"
@@ -123,22 +123,22 @@ const Contact = () => {
           </div>
         </div>
        
-        <div className="mt-10 flex w-full flex-col items-center justify-center gap-16 sm:mt-32 sm:gap-12 md:mt-40 md:flex-row lg:mt-12 lg:max-w-[1440px]">
-          <div className="lg:mt-10 flex w-[350px] max-w-[90%] flex-col sm:items-center sm:justify-center text-right text-[14px] font-semibold uppercase text-[#e4ded7] sm:w-[350px] sm:text-[14px] md:w-[310px] md:text-[16px] lg:w-[420px] lg:text-[16px]">
+        <div className="md:mt-10 flex w-full flex-col items-center justify-center gap-16 sm:mt-16 sm:gap-12 md:mt-40 md:flex-row lg:mt-0 lg:max-w-[1440px]">
+          <div className="md:mt-10 flex w-[350px] max-w-[90%] flex-col items-center sm:justify-center text-right text-[14px] font-semibold uppercase text-[#e4ded7] sm:w-[350px] sm:text-[14px] md:w-[310px] md:text-[16px] lg:w-[420px] lg:text-[16px]">
           <Link
               href="mailto:muhamad.khizr@gmail.com?subject=Lets%20work%20together!&amp;body=Hello%2C%20I%20think%20we%20need%20you%20to%20work%20on%2Fcollaborate%20this%20particular%20product...%20Reach%20out%20as%20soon%20as%20you%20can."
               target="_blank"
               aria-label="Send Me an Email"
-              className="mt-1 w-[200px] flex-1 hover:no-underline sm:mt-2 sm:w-[147px] md:mt-3 md:w-[200px] lg:mt-4"
+              className="mt-10 sm:mt-0 w-[200px] flex-1 hover:no-underline sm:mt-2 sm:w-[147px] md:mt-3 md:w-[200px] lg:mt-4"
               style={{
                 width: '-webkit-max-content',
               }}
             >
               {/* <AnimatedBody text={"Send me an email"} className={""} /> */}
               <motion.button
-              className="rounded-md border-3 border-[#ff00ff] py-4 px-6 text-[20px] font-bold text-black bg-[#e4ded7] sm:block lg:text-[24px] lg:block sm:mb-20"
+              className="rounded-md border-3 border-[#ff00ff] py-2 px-4 sm:py-4 sm:px-6 text-[20px] font-bold sm:mt-10 text-black bg-[#e4ded7] sm:block lg:text-[24px] lg:block sm:mb-20"
               variants={bodyAnimation}
-              style={{ color: 'black', width: '-webkit-max-content', marginTop: '0rem', marginBottom: '0rem'}}
+              style={{ color: 'black', width: '-webkit-max-content'}}
             >
               Let&apos;s Connect Now
             </motion.button>
