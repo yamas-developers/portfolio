@@ -20,7 +20,7 @@ const NavBar = () => {
   return (
     <nav className="fixed bottom-10 left-0 right-0 z-50 my-0  mx-auto  flex w-[306px] items-center justify-center gap-1 rounded-lg bg-[#07070a]/90 px-1 py-1 text-[#e4ded7] backdrop-blur-md sm:w-[383.3px] md:p-2 lg:w-[391.3px]">
       <Link
-        href="https://drive.google.com/file/d/1Mmwl-FRGPm5QVe3AjtukJr_Jpc366Ear/view"
+        href="https://docs.google.com/document/d/1E2_jcAz_NKCHMYEzyoomG8Nwh7kO4LyjIIPMu3kVAAs/edit?usp=sharing"
         target="_blank"
         className="flex"
         aria-label="Open my resume"
@@ -54,7 +54,7 @@ const NavBar = () => {
         </h4>
       </Link>
 
-      <Link
+      {/* <Link
         href="#about"
         data-blobity-magnetic="false"
         onClick={handleScroll}
@@ -63,7 +63,7 @@ const NavBar = () => {
         <h4 className="rounded py-2 px-2 sm:px-4 text-[12px] sm:text-[14px] md:py-1 md:px-4">
           About
         </h4>
-      </Link>
+      </Link> */}
 
       <Link
         href="#contact"
