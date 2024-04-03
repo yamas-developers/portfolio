@@ -16,7 +16,7 @@ const Hero = () => {
     >
       <motion.div className="absolute left-0 top-0 right-0 bottom-0 h-full w-full bg-[#0E1016] mix-blend-color"></motion.div>
 
-      <div className="absolute top-10 flex justify-between cw-[90%] lg:max-w-[1440px]">
+      <div className="absolute top-10 flex justify-between cw-[100%] lg:max-w-[1440px]">
         <div>
           <Link
             href="https://docs.google.com/document/d/1E2_jcAz_NKCHMYEzyoomG8Nwh7kO4LyjIIPMu3kVAAs/edit?usp=sharing"
@@ -32,7 +32,7 @@ const Hero = () => {
           </Link>
         </div>
 
-        <div className="flex gap-10 text-[#e4ded7] sm:gap-12 md:gap-14 lg:gap-14">
+        <div className="flex gap-10 text-[#e4ded7] pt-2 ml-10 sm:gap-12 md:gap-14 lg:gap-14">
           <Link
             href="https://github.com/yamas-developers"
             target="_blank"
