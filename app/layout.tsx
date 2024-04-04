@@ -56,9 +56,9 @@ export const metadata: Metadata = {
         alt: "Muhammad Khizr — Flutter Developer | Full Stack Developer | Freelancer",
       },
       {
-        url: "https://github.com/yamas-developers/portfolio/assets/142791023/86b33b6b-9292-44f7-b54d-5c75147bdd45",
-        width: 1200,
-        height: 630,
+        url: "https://github.com/yamas-developers/portfolio/assets/142791023/75755e68-2912-44a7-aa25-8e25306097c3",
+        width: 1280,
+        height: 582,
         alt: "Muhammad Khizr — Flutter Developer | Full Stack Developer | Freelancer",
       },
     ],
