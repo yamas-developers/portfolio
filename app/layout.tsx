@@ -57,8 +57,8 @@ export const metadata: Metadata = {
       },
       {
         url: "https://drive.google.com/file/d/1ziMwAxUV9ZKSPlKZRh_WqhWtel8Ri3RH/view?usp=sharing",
-        width: 1200,
-        height: 630,
+        width: 300,
+        height: 300,
         alt: "Muhammad Khizr — Flutter Developer | Full Stack Developer | Freelancer",
       },
     ],
