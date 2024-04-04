@@ -44,18 +44,6 @@ export const metadata: Metadata = {
     siteName: "www.khizr.net",
     images: [
       {
-        url: "https://drive.google.com/file/d/1avC7QzfHz3M30STAdvk5BAfus3bt6DC7/view?usp=sharing",
-        width: 1200,
-        height: 630,
-        alt: "Muhammad Khizr — Flutter Developer | Full Stack Developer | Freelancer",
-      },
-      {
-        url: "https://drive.google.com/file/d/1ziMwAxUV9ZKSPlKZRh_WqhWtel8Ri3RH/view?usp=sharing",
-        width: 1200,
-        height: 630,
-        alt: "Muhammad Khizr — Flutter Developer | Full Stack Developer | Freelancer",
-      },
-      {
         url: "https://github.com/yamas-developers/portfolio/assets/142791023/77b4e3e8-e66d-48cc-9fac-4942b22e82f5",
         width: 1200,
         height: 600,
