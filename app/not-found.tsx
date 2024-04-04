@@ -7,7 +7,7 @@ const NotFound = () => {
     <div className="flex h-[100vh] flex-col items-center justify-center bg-[#0E1016] text-[#e4ded7] gap-5">
       <p className="text-[25px] sm:text-[30px] md:text-[35px] lg:text-[40px] uppercase">Egbon, you don miss road oh!</p>
       <Image
-        src="https://user-images.githubusercontent.com/84178696/228884970-66a9687c-b364-48e4-91ca-05332dadbba9.png"
+        src="https://drive.google.com/file/d/1avC7QzfHz3M30STAdvk5BAfus3bt6DC7/view?usp=sharing"
         alt="Funny Meme"
         width={858}
         height={483}

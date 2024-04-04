@@ -44,7 +44,7 @@ export const metadata: Metadata = {
     siteName: "www.khizr.net",
     images: [
       {
-        url: "https://user-images.githubusercontent.com/84178696/228620835-e3cc5c9b-72fc-4f54-a628-407ef7b650f5.png",
+        url: "https://drive.google.com/file/d/1avC7QzfHz3M30STAdvk5BAfus3bt6DC7/view?usp=sharing",
         width: 1200,
         height: 630,
         alt: "Muhammad Khizr — Flutter Developer | Full Stack Developer | Freelancer",
@@ -61,7 +61,7 @@ export const metadata: Metadata = {
   //   creator: "khizr__",
   //   creatorId: "1243720976552144897",
   //   images: [
-  //     "https://user-images.githubusercontent.com/84178696/228620835-e3cc5c9b-72fc-4f54-a628-407ef7b650f5.png",
+  //     "https://drive.google.com/file/d/1avC7QzfHz3M30STAdvk5BAfus3bt6DC7/view?usp=sharing",
   //   ],
   // },
   robots: {
