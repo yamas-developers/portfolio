@@ -6,9 +6,11 @@ import { PostHogProvider as PHProvider } from "posthog-js/react";
 
 export function PostHogProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
-    const key = process.env.NEXT_PUBLIC_POSTHOG_KEY;
+    const key =
+      process.env.NEXT_PUBLIC_POSTHOG_KEY ||
+      "phc_oTcqvUJH4RrrXWjHuqmedr6XF99zZfDz7oCd34XLNNCd";
 
-    if (key && typeof window !== "undefined" && !posthog.__loaded) {
+    if (typeof window !== "undefined" && !posthog.__loaded) {
       posthog.init(key, {
         api_host: "/ingest",
         ui_host: "https://us.posthog.com",
@@ -17,6 +19,11 @@ export function PostHogProvider({ children }: { children: ReactNode }) {
         capture_pageleave: true,
         autocapture: true,
         disable_session_recording: false,
+        loaded: (ph) => {
+          if (process.env.NODE_ENV === "development") {
+            ph.debug();
+          }
+        },
       });
     }
   }, []);
