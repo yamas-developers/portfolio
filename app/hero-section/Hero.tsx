@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import profile from "../../public/profile-portrait.webp";
-import { projectEmailHref } from "../contact-section/contactDetails";
+import { projectEmailHref, triggerEmailToast } from "../contact-section/contactDetails";
 import { captureEvent } from "../analytics/posthog";
 
 export default function Hero() {
@@ -32,12 +32,13 @@ export default function Hero() {
           <a
             className="button secondary"
             href={projectEmailHref}
-            onClick={() =>
+            onClick={() => {
+              triggerEmailToast();
               captureEvent("contact_click", {
                 location: "hero",
                 target: "mailto",
-              })
-            }
+              });
+            }}
           >
             Discuss a project <span aria-hidden="true">↗</span>
           </a>

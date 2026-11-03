@@ -12,7 +12,8 @@ import { captureEvent } from "../analytics/posthog";
 
 type FilterType = "all" | "mobile" | "web";
 
-const INITIAL_VISIBLE_COUNT = 7;
+const DESKTOP_INITIAL_COUNT = 7;
+const MOBILE_INITIAL_COUNT = 4;
 
 function hasWebExperience(project: ProjectProps) {
   const format = visuals[project.id]?.format;
@@ -26,12 +27,27 @@ function hasWebExperience(project: ProjectProps) {
 export default function ProjectGrid() {
   const [activeFilter, setActiveFilter] = useState<FilterType>("all");
   const [showAll, setShowAll] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const [selectedProject, setSelectedProject] = useState<ProjectProps | null>(
     null
   );
   const [statusAnnouncement, setStatusAnnouncement] = useState("");
   const dialogRef = useRef<HTMLDialogElement | null>(null);
   const lastTriggerRef = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 767px)");
+    setIsMobile(mediaQuery.matches);
+
+    const onMediaChange = (e: MediaQueryListEvent) => {
+      setIsMobile(e.matches);
+    };
+
+    mediaQuery.addEventListener("change", onMediaChange);
+    return () => mediaQuery.removeEventListener("change", onMediaChange);
+  }, []);
+
+  const initialCount = isMobile ? MOBILE_INITIAL_COUNT : DESKTOP_INITIAL_COUNT;
 
   const filteredProjects = orderedProjects.filter((project) => {
     if (activeFilter === "all") return true;
@@ -41,10 +57,10 @@ export default function ProjectGrid() {
 
   const visibleProjects = showAll
     ? filteredProjects
-    : filteredProjects.slice(0, INITIAL_VISIBLE_COUNT);
+    : filteredProjects.slice(0, initialCount);
   const remainingCount = Math.max(
     0,
-    filteredProjects.length - INITIAL_VISIBLE_COUNT
+    filteredProjects.length - initialCount
   );
 
   const handleFilterChange = (nextFilter: FilterType) => {
@@ -56,7 +72,7 @@ export default function ProjectGrid() {
       if (nextFilter === "mobile") return project.id !== 12;
       return hasWebExperience(project);
     });
-    const shown = Math.min(INITIAL_VISIBLE_COUNT, nextList.length);
+    const shown = Math.min(initialCount, nextList.length);
     setStatusAnnouncement(`${shown} of ${nextList.length} projects shown.`);
   };
 
@@ -66,18 +82,20 @@ export default function ProjectGrid() {
     captureEvent("work_toggle_projects", {
       show_all: nextShowAll,
       filter: activeFilter,
-      total_shown: nextShowAll ? filteredProjects.length : Math.min(INITIAL_VISIBLE_COUNT, filteredProjects.length),
+      total_shown: nextShowAll
+        ? filteredProjects.length
+        : Math.min(initialCount, filteredProjects.length),
     });
     setStatusAnnouncement(
       `${
         nextShowAll
           ? filteredProjects.length
-          : Math.min(INITIAL_VISIBLE_COUNT, filteredProjects.length)
+          : Math.min(initialCount, filteredProjects.length)
       } of ${filteredProjects.length} projects shown.`
     );
 
-    if (nextShowAll && filteredProjects[INITIAL_VISIBLE_COUNT]) {
-      const targetId = filteredProjects[INITIAL_VISIBLE_COUNT].id;
+    if (nextShowAll && filteredProjects[initialCount]) {
+      const targetId = filteredProjects[initialCount].id;
       requestAnimationFrame(() => {
         const extraButton = document.querySelector<HTMLElement>(
           `#project-${targetId} .project-title-button`
@@ -171,7 +189,10 @@ export default function ProjectGrid() {
         {statusAnnouncement}
       </p>
 
-      <div className="project-grid" id="project-grid">
+      <div
+        className={`project-grid${showAll ? " is-expanded" : ""}`}
+        id="project-grid"
+      >
         {visibleProjects.map((project, index) => (
           <ProjectCard
             key={project.id}
@@ -183,7 +204,7 @@ export default function ProjectGrid() {
         ))}
       </div>
 
-      {filteredProjects.length > INITIAL_VISIBLE_COUNT && (
+      {filteredProjects.length > initialCount && (
         <div className="more-work">
           <button
             type="button"
@@ -194,7 +215,7 @@ export default function ProjectGrid() {
           >
             {showAll ? (
               <>
-                Show top {INITIAL_VISIBLE_COUNT} projects{" "}
+                Show top {initialCount} projects{" "}
                 <span aria-hidden="true">↑</span>
               </>
             ) : (

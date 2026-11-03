@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 
-const sectionIds = ["home", "work", "experience", "feedback", "contact"];
+const sectionIds = ["home", "work", "feedback", "experience", "contact"];
 
 export default function MotionController() {
   useEffect(() => {

@@ -22,7 +22,7 @@ export default function About() {
           I’m Khizr, a full stack developer based in Pakistan. I work across
           mobile apps, websites, and the backend systems that connect them.
         </p>
-        <p>
+        <p className="about-intro-secondary">
           My work spans Flutter, React Native and Expo, Laravel, Node.js,
           Firebase, WordPress, and Next.js across different projects.
         </p>
@@ -43,8 +43,22 @@ export default function About() {
               {String(index + 1).padStart(2, "0")}
             </span>
             <h3>{item.title}</h3>
-            <p>{item.description}</p>
-            <p className="experience-tools">{item.technologies}</p>
+            <p className="experience-desc">{item.description}</p>
+            <p
+              className="experience-tools"
+              aria-label={`Technologies: ${item.technologies}`}
+            >
+              {item.technologies.split(" · ").map((tech, i, arr) => (
+                <span key={tech} className="tech-chip">
+                  {tech}
+                  {i < arr.length - 1 && (
+                    <span className="tech-sep" aria-hidden="true">
+                      {" "}·{" "}
+                    </span>
+                  )}
+                </span>
+              ))}
+            </p>
             <p className="experience-evidence">{item.evidence}</p>
           </div>
         ))}

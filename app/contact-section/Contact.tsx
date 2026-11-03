@@ -1,6 +1,6 @@
 "use client";
 
-import { projectEmailHref } from "./contactDetails";
+import { projectEmailHref, triggerEmailToast } from "./contactDetails";
 import { captureEvent } from "../analytics/posthog";
 
 export default function Contact() {
@@ -25,12 +25,13 @@ export default function Contact() {
         <a
           className="button primary"
           href={projectEmailHref}
-          onClick={() =>
+          onClick={() => {
+            triggerEmailToast();
             captureEvent("contact_click", {
               location: "contact_section",
               target: "mailto",
-            })
-          }
+            });
+          }}
         >
           Discuss a project <span aria-hidden="true">↗</span>
         </a>

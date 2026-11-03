@@ -53,11 +53,11 @@ export default function NavBar() {
           <a href="#work" onClick={() => onNavClick("work")}>
             Work
           </a>
-          <a href="#experience" onClick={() => onNavClick("experience")}>
-            Experience
-          </a>
           <a href="#feedback" onClick={() => onNavClick("feedback")}>
             Feedback
+          </a>
+          <a href="#experience" onClick={() => onNavClick("experience")}>
+            Experience
           </a>
           <a href="#contact" onClick={() => onNavClick("contact")}>
             Contact
