@@ -1,26 +1,22 @@
-import React from "react";
 import Link from "next/link";
-import Image from "next/image";
 
-const NotFound = () => {
+export default function NotFound() {
   return (
-    <div className="flex h-[100vh] flex-col items-center justify-center bg-[#0E1016] text-[#e4ded7] gap-5">
-      <p className="text-[25px] sm:text-[30px] md:text-[35px] lg:text-[40px] uppercase">Egbon, you don miss road oh!</p>
-      <Image
-        src="https://drive.google.com/file/d/1avC7QzfHz3M30STAdvk5BAfus3bt6DC7/view?usp=sharing"
-        alt="Funny Meme"
-        width={858}
-        height={483}
-        className="w-[90%] sm:w-[80%] md:w-[70%] lg:w-[60%]"
-      />
-      <div>
-        <Link href="/" className="text-[25px] sm:text-[30px] md:text-[35px] lg:text-[40px] uppercase">
-          Head back to my{" "}
-          <span className="underline underline-offset-2">Portfolio</span>
+    <main className="shell not-found-page">
+      <p className="eyebrow">404 · Page not found</p>
+      <h1>This page doesn’t exist.</h1>
+      <p className="hero-description">
+        The link you followed may have moved or been consolidated into the
+        homepage.
+      </p>
+      <div className="hero-actions">
+        <Link href="/" className="button primary">
+          Back to homepage <span aria-hidden="true">↗</span>
+        </Link>
+        <Link href="/#work" className="button secondary">
+          View selected work <span aria-hidden="true">↗</span>
         </Link>
       </div>
-    </div>
+    </main>
   );
-};
-
-export default NotFound;
+}

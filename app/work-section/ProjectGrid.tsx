@@ -1,69 +1,282 @@
-import ProjectCard from "./ProjectCard";
-import { devProjects, designProjects, ProjectProps } from "./projectDetails";
-import { useState } from "react";
+"use client";
 
-const ProjectGrid = () => {
-  // const [filter, setFilter] = useState(true);
+import { useEffect, useRef, useState } from "react";
+import ProjectCard from "./ProjectCard";
+import {
+  getProjectLinks,
+  orderedProjects,
+  ProjectProps,
+} from "./projectDetails";
+import ProjectVisual, { visuals } from "./ProjectVisual";
+
+type FilterType = "all" | "mobile" | "web";
+
+const INITIAL_VISIBLE_COUNT = 7;
+
+function hasWebExperience(project: ProjectProps) {
+  const format = visuals[project.id]?.format;
+  return (
+    format === "websiteApps" ||
+    format === "website" ||
+    [0, 1, 2].includes(project.id)
+  );
+}
+
+export default function ProjectGrid() {
+  const [activeFilter, setActiveFilter] = useState<FilterType>("all");
+  const [showAll, setShowAll] = useState(false);
+  const [selectedProject, setSelectedProject] = useState<ProjectProps | null>(
+    null
+  );
+  const [statusAnnouncement, setStatusAnnouncement] = useState("");
+  const dialogRef = useRef<HTMLDialogElement | null>(null);
+  const lastTriggerRef = useRef<HTMLElement | null>(null);
+
+  const filteredProjects = orderedProjects.filter((project) => {
+    if (activeFilter === "all") return true;
+    if (activeFilter === "mobile") return project.id !== 12;
+    return hasWebExperience(project);
+  });
+
+  const visibleProjects = showAll
+    ? filteredProjects
+    : filteredProjects.slice(0, INITIAL_VISIBLE_COUNT);
+  const remainingCount = Math.max(
+    0,
+    filteredProjects.length - INITIAL_VISIBLE_COUNT
+  );
+
+  const handleFilterChange = (nextFilter: FilterType) => {
+    setActiveFilter(nextFilter);
+    setShowAll(false);
+    const nextList = orderedProjects.filter((project) => {
+      if (nextFilter === "all") return true;
+      if (nextFilter === "mobile") return project.id !== 12;
+      return hasWebExperience(project);
+    });
+    const shown = Math.min(INITIAL_VISIBLE_COUNT, nextList.length);
+    setStatusAnnouncement(`${shown} of ${nextList.length} projects shown.`);
+  };
+
+  const handleToggleShowAll = () => {
+    const nextShowAll = !showAll;
+    setShowAll(nextShowAll);
+    setStatusAnnouncement(
+      `${
+        nextShowAll
+          ? filteredProjects.length
+          : Math.min(INITIAL_VISIBLE_COUNT, filteredProjects.length)
+      } of ${filteredProjects.length} projects shown.`
+    );
+
+    if (nextShowAll && filteredProjects[INITIAL_VISIBLE_COUNT]) {
+      const targetId = filteredProjects[INITIAL_VISIBLE_COUNT].id;
+      requestAnimationFrame(() => {
+        const extraButton = document.querySelector<HTMLElement>(
+          `#project-${targetId} .project-title-button`
+        );
+        extraButton?.focus();
+      });
+    }
+  };
+
+  const handleOpenOverview = (project: ProjectProps, trigger: HTMLElement) => {
+    lastTriggerRef.current = trigger;
+    setSelectedProject(project);
+  };
+
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    if (!dialog) return;
+
+    if (selectedProject) {
+      if (!dialog.open) {
+        dialog.showModal();
+      }
+      document.body.style.overflow = "hidden";
+      dialog.scrollTop = 0;
+    } else if (dialog.open) {
+      dialog.close();
+    }
+  }, [selectedProject]);
+
+  const handleDialogClose = () => {
+    document.body.style.overflow = "";
+    setSelectedProject(null);
+    const trigger = lastTriggerRef.current;
+    if (trigger) {
+      requestAnimationFrame(() => {
+        trigger.focus();
+      });
+    }
+  };
+
+  const selectedLinks = selectedProject ? getProjectLinks(selectedProject) : [];
+  const selectedCategory = selectedProject
+    ? selectedProject.category ??
+      (selectedProject.id === 0
+        ? "Marketplace"
+        : selectedProject.id === 1
+        ? "On-demand services"
+        : selectedProject.id === 2
+        ? "Community & social"
+        : selectedProject.id === 3
+        ? "Everyday services"
+        : "Mobile & web")
+    : "";
 
   return (
     <>
-      {/* <div className="mb-10 flex gap-16 text-[#e4ded7] md:mb-16  lg:mb-20 ">
-        <h4
-          className={`text-[16px] md:text-[20px] lg:text-[24px] ${
-            filter ? "text-[#e4ded7]" : "text-[#e4ded7]/30"
-          }`}
-          onClick={() => setFilter(true)}
-        >
-          Development
-        </h4>{" "}
-        <h4
-          className={`text-[16px] md:text-[20px] lg:text-[24px] ${
-            filter ? "text-[#e4ded7]/30" : "text-[#e4ded7]"
-          }`}
-          onClick={() => setFilter(false)}
-        >
-          Design
-        </h4>
-      </div> */}
+      <div className="work-heading">
+        <h2 id="work-title">
+          Selected work
+          <span className="project-count" id="project-count">
+            {filteredProjects.length}{" "}
+            {filteredProjects.length === 1 ? "project" : "projects"}
+          </span>
+        </h2>
+        <div className="filters" role="group" aria-label="Filter projects">
+          <button
+            type="button"
+            aria-pressed={activeFilter === "all"}
+            onClick={() => handleFilterChange("all")}
+          >
+            All work
+          </button>
+          <button
+            type="button"
+            aria-pressed={activeFilter === "mobile"}
+            onClick={() => handleFilterChange("mobile")}
+          >
+            Mobile apps
+          </button>
+          <button
+            type="button"
+            aria-pressed={activeFilter === "web"}
+            onClick={() => handleFilterChange("web")}
+          >
+            Web
+          </button>
+        </div>
+      </div>
 
-      {/* {filter ? ( */}
-        <div className="grid w-[90%] grid-cols-1 grid-rows-2 gap-y-10 gap-x-6 lg:max-w-[1200px] lg:grid-cols-1">
-          {devProjects.map((project: ProjectProps) => (
-            <ProjectCard
-              id={project.id}
-              key={project.id}
-              name={project.name}
-              description={project.description}
-              technologies={project.technologies}
-              github={project.github}
-              apk={project.apk}
-              ios={project.ios}
-              demo={project.demo}
-              image={project.image}
-              available={project.available}
-            />
-          ))}
+      <p className="sr-only" id="filter-status" role="status">
+        {statusAnnouncement}
+      </p>
+
+      <div className="project-grid" id="project-grid">
+        {visibleProjects.map((project, index) => (
+          <ProjectCard
+            key={project.id}
+            {...project}
+            featured={index === 0}
+            priority={index < 2}
+            onOpenOverview={handleOpenOverview}
+          />
+        ))}
+      </div>
+
+      {filteredProjects.length > INITIAL_VISIBLE_COUNT && (
+        <div className="more-work">
+          <button
+            type="button"
+            className="button secondary"
+            id="more-work"
+            aria-expanded={showAll}
+            onClick={handleToggleShowAll}
+          >
+            {showAll ? (
+              <>
+                Show top {INITIAL_VISIBLE_COUNT} projects{" "}
+                <span aria-hidden="true">↑</span>
+              </>
+            ) : (
+              <>
+                View all {filteredProjects.length} projects ({remainingCount}{" "}
+                more) <span aria-hidden="true">↓</span>
+              </>
+            )}
+          </button>
         </div>
-      {/* ) : (
-        <div className="grid w-[90%] grid-cols-1 grid-rows-2 gap-y-6 gap-x-6 lg:max-w-[1200px] lg:grid-cols-1">
-          {designProjects.map((project: ProjectProps) => (
-            <ProjectCard
-              id={project.id}
-              key={project.id}
-              name={project.name}
-              description={project.description}
-              technologies={project.technologies}
-              github={project.github}
-              demo={project.demo}
-              image={project.image}
-              bgColor={project.bgColor}
-              available={project.available}
-            />
-          ))}
-        </div>
-      )} */}
+      )}
+
+      <dialog
+        ref={dialogRef}
+        id="project-dialog"
+        className="project-dialog"
+        aria-labelledby="dialog-title"
+        onClose={handleDialogClose}
+        onClick={(e) => {
+          const dialog = dialogRef.current;
+          if (!dialog || e.target !== dialog) return;
+          const rect = dialog.getBoundingClientRect();
+          if (
+            e.clientX < rect.left ||
+            e.clientX > rect.right ||
+            e.clientY < rect.top ||
+            e.clientY > rect.bottom
+          ) {
+            dialog.close();
+          }
+        }}
+      >
+        {selectedProject && (
+          <>
+            <div className="dialog-nav">
+              <span>Project overview</span>
+              <button
+                className="close-dialog"
+                type="button"
+                aria-label="Close project overview"
+                onClick={() => dialogRef.current?.close()}
+              >
+                Close <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <div id="dialog-content">
+              <div className="dialog-media">
+                <ProjectVisual
+                  id={selectedProject.id}
+                  inDialog
+                  priority
+                  showCaption
+                />
+              </div>
+              <div className="dialog-copy">
+                <p className="project-category">{selectedCategory}</p>
+                <h2 id="dialog-title">{selectedProject.name}</h2>
+                <p>{selectedProject.description}</p>
+                <dl className="dialog-facts">
+                  <div>
+                    <dt>My role</dt>
+                    <dd>{selectedProject.role ?? "Full stack developer"}</dd>
+                  </div>
+                  {selectedProject.technologies.length > 0 && (
+                    <div>
+                      <dt>Technology</dt>
+                      <dd>{selectedProject.technologies.join(" / ")}</dd>
+                    </div>
+                  )}
+                </dl>
+                {selectedLinks.length > 0 && (
+                  <div className="dialog-links">
+                    {selectedLinks.map((link) => (
+                      <a
+                        key={link.label}
+                        href={link.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {link.label} <span aria-hidden="true">↗</span>
+                      </a>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          </>
+        )}
+      </dialog>
     </>
   );
-};
-
-export default ProjectGrid;
+}

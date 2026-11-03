@@ -9,15 +9,15 @@ const nextConfig = {
   images: {
     domains: ["user-images.githubusercontent.com", "cdn.hashnode.com"],
   },
-  fontLoaders: [
-    {
-      loader: "@next/font/google",
-      options: {
-        subsets: ["latin"],
-        weight: ["400", "500", "600", "700", "800"],
+  async redirects() {
+    return [
+      {
+        source: "/portfolio",
+        destination: "/#work",
+        permanent: true,
       },
-    },
-  ],
+    ];
+  },
 };
 
 module.exports = nextConfig;

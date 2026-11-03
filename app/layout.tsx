@@ -1,77 +1,59 @@
 import "./globals.css";
 import { ReactNode } from "react";
 import type { Metadata } from "next";
-import { Syne } from "@next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 
-const syne = Syne({
-  subsets: ["latin"],
-  display: "block",
-  weight: ["400", "500", "600", "700", "800"],
-});
-
 export const metadata: Metadata = {
-  title: "Muhammad Khizr — Flutter Developer | Full Stack Developer | Freelancer",
+  title: "Muhammad Khizr — Flutter & Full Stack Developer",
   description:
-    "Flutter Developer | Full Stack Developer | Freelancer. Focused on interfaces and experiences, working remotely from Pakistan.",
+    "Mobile apps, Laravel backends, and responsive web platforms. Flutter & Full Stack Developer based in Pakistan, working remotely.",
+  alternates: { canonical: "https://www.khizr.net/" },
   generator: "Next.js",
   applicationName: "Muhammad Khizr",
   keywords: [
     "freelance",
     "developer",
     "freelance developer",
-    "frontend",
-    "react",
-    "frontend developer",
-    "frontend engineer",
-    "creative",
-    "creative developer",
-    "creative engineer",
-    "tech",
-    "nigeria",
-    "software",
+    "flutter",
+    "laravel",
+    "react native",
+    "next.js",
+    "full stack developer",
+    "mobile developer",
     "software developer",
     "portfolio",
-    "frontend developer portfolio",
-    "creative developer portfolio",
   ],
-  colorScheme: "dark",
+  colorScheme: "light dark",
   openGraph: {
-    title: "Muhammad Khizr — Flutter Developer | Full Stack Developer | Freelancer",
+    title: "Muhammad Khizr — Flutter & Full Stack Developer",
     description:
-      "Flutter Developer | Full Stack Developer | Freelancer. Focused on interfaces and experiences, working remotely from Pakistan.",
+      "Mobile apps, Laravel backends, and responsive web platforms. Focused on interfaces and experiences, working remotely from Pakistan.",
     url: "https://www.khizr.net/",
     siteName: "www.khizr.net",
     images: [
       {
-        url: "https://github.com/yamas-developers/portfolio/assets/142791023/77b4e3e8-e66d-48cc-9fac-4942b22e82f5",
-        width: 1200,
-        height: 600,
-        alt: "Muhammad Khizr — Flutter Developer | Full Stack Developer | Freelancer",
+        url: "https://www.khizr.net/projects/pich.png",
+        alt: "Muhammad Khizr — Flutter & Full Stack Developer",
       },
     ],
-    locale: "en-US",
+    locale: "en_US",
     type: "website",
   },
-  // twitter: {
-  //   card: "summary_large_image",
-  //   title: "Muhammad Khizr — Flutter Developer | Full Stack Developer | Freelancer",
-  //   description:
-  //     "Flutter Developer | Full Stack Developer | Freelancer. Focused on interfaces and experiences, working remotely from Pakistan.",
-  //   creator: "khizr__",
-  //   creatorId: "1243720976552144897",
-  //   images: [
-  //     "https://drive.google.com/file/d/1avC7QzfHz3M30STAdvk5BAfus3bt6DC7/view?usp=sharing",
-  //   ],
-  // },
+  twitter: {
+    card: "summary_large_image",
+    title: "Muhammad Khizr — Flutter & Full Stack Developer",
+    description:
+      "Mobile apps, Laravel backends, and responsive web platforms. Based in Pakistan, working remotely.",
+    images: ["https://www.khizr.net/projects/pich.png"],
+  },
   robots: {
     index: true,
     follow: true,
     nocache: false,
     googleBot: {
       index: true,
-      follow: false,
-      noimageindex: true,
+      follow: true,
+      noimageindex: false,
       "max-video-preview": -1,
       "max-image-preview": "large",
       "max-snippet": -1,
@@ -86,10 +68,8 @@ type RootLayoutProps = {
 
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
-    <html lang="en">
-      <body
-        className={`${syne.className} scroll-smooth pl-0 scrollbar-thin scrollbar-track-[#0E1016] scrollbar-thumb-[#212531]`}
-      >
+    <html lang="en" data-theme="light" suppressHydrationWarning>
+      <body className="antialiased">
         {children}
         <Analytics />
       </body>

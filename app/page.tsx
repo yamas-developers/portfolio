@@ -1,52 +1,28 @@
-"use client";
 import Hero from "./hero-section/Hero";
-import useBlobity from "blobity/lib/react/useBlobity";
-import { useEffect } from "react";
-import { ScrollerMotion } from "scroller-motion";
-import PreLoader from "./animations/PreLoader/PreLoader";
-import { initialBlobityOptions } from "./utils/BlobityConfig";
 import NavBar from "./navbar/NavBar";
-
-import dynamic from "next/dynamic";
-const Work = dynamic(() => import("./work-section/Work"));
-const About = dynamic(() => import("./about-section/About"));
-// const Blog = dynamic(() => import("./blog-section/BlogGrid"));
-const Contact = dynamic(() => import("./contact-section/Contact"));
-const Footer = dynamic(() => import("./footer/Footer"));
+import Work from "./work-section/Work";
+import About from "./about-section/About";
+import Feedback from "./feedback-section/Feedback";
+import Contact from "./contact-section/Contact";
+import Footer from "./footer/Footer";
+import MotionController from "./animations/MotionController";
 
 export default function Home() {
-  const blobityInstance = useBlobity(initialBlobityOptions);
-
-  useEffect(() => {
-    if (blobityInstance.current) {
-      // @ts-ignore for debugging purposes or playing around
-      window.blobity = blobityInstance.current;
-    }
-  }, [blobityInstance]);
-
-  useEffect(() => {
-    window.scrollTo({
-      top: 0,
-      left: 0,
-    });
-  }, []);
-
   return (
     <>
-      <PreLoader />
-
+      <MotionController />
+      <a className="skip-link" href="#main">
+        Skip to content
+      </a>
       <NavBar />
-
-      {/* <ScrollerMotion> */}
-      <main className="flex flex-col items-center justify-center">
+      <main id="main">
         <Hero />
         <Work />
-        {/* <About /> */}
-        {/* <Blog /> */}
+        <About />
+        <Feedback />
         <Contact />
-        <Footer />
       </main>
-      {/* </ScrollerMotion> */}
+      <Footer />
     </>
   );
 }

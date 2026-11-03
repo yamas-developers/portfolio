@@ -18,6 +18,10 @@
 # misc
 .DS_Store
 *.pem
+*.tsbuildinfo
+
+# local docs, prototypes, and backups
+/docs
 
 # debug
 npm-debug.log*

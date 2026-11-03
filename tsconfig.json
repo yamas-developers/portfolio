@@ -26,13 +26,12 @@
   "include": [
     "next-env.d.ts",
     ".next/types/**/*.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    "app/work-section/projectDetails.ts",
-    "app/animations/PreLoader/loader.js",
+    "app/**/*.ts",
+    "app/**/*.tsx",
     "build/types/**/*.ts"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "docs"
   ]
 }
