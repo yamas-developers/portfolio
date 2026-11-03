@@ -1,5 +1,6 @@
 import { getProjectLinks, ProjectProps } from "./projectDetails";
 import ProjectVisual from "./ProjectVisual";
+import { captureEvent } from "../analytics/posthog";
 
 type ProjectCardProps = ProjectProps & {
   featured?: boolean;
@@ -33,6 +34,15 @@ export default function ProjectCard(project: ProjectCardProps) {
       ? "Everyday services"
       : "Mobile & web");
 
+  const handleOpenOverview = (trigger: HTMLElement) => {
+    captureEvent("project_view_details", {
+      project_id: id,
+      project_name: name,
+      category: displayCategory,
+    });
+    onOpenOverview(project, trigger);
+  };
+
   return (
     <article
       className={`project-card${featured ? " featured" : ""}`}
@@ -42,7 +52,7 @@ export default function ProjectCard(project: ProjectCardProps) {
       <button
         type="button"
         className="project-media"
-        onClick={(e) => onOpenOverview(project, e.currentTarget)}
+        onClick={(e) => handleOpenOverview(e.currentTarget)}
         aria-label={`Explore ${name} overview`}
         aria-haspopup="dialog"
       >
@@ -63,7 +73,7 @@ export default function ProjectCard(project: ProjectCardProps) {
               <button
                 type="button"
                 className="project-title-button"
-                onClick={(e) => onOpenOverview(project, e.currentTarget)}
+                onClick={(e) => handleOpenOverview(e.currentTarget)}
                 aria-haspopup="dialog"
               >
                 {name}
@@ -72,7 +82,7 @@ export default function ProjectCard(project: ProjectCardProps) {
             <button
               type="button"
               className="project-arrow"
-              onClick={(e) => onOpenOverview(project, e.currentTarget)}
+              onClick={(e) => handleOpenOverview(e.currentTarget)}
               aria-label={`Open ${name} overview`}
               aria-haspopup="dialog"
             >
@@ -99,6 +109,14 @@ export default function ProjectCard(project: ProjectCardProps) {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={`${name}: ${link.label} (opens in a new tab)`}
+                  onClick={() =>
+                    captureEvent("project_external_link_click", {
+                      project_id: id,
+                      project_name: name,
+                      link_label: link.label,
+                      url: link.href,
+                    })
+                  }
                 >
                   {link.label} <span aria-hidden="true">↗</span>
                 </a>

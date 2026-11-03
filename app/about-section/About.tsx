@@ -1,4 +1,7 @@
+"use client";
+
 import { developmentExperience } from "./developmentExperience";
+import { captureEvent } from "../analytics/posthog";
 
 export default function About() {
   return (
@@ -28,6 +31,7 @@ export default function About() {
           href="https://docs.google.com/document/d/1E2_jcAz_NKCHMYEzyoomG8Nwh7kO4LyjIIPMu3kVAAs/edit?usp=sharing"
           target="_blank"
           rel="noopener noreferrer"
+          onClick={() => captureEvent("resume_view_click", { destination: "google_docs" })}
         >
           View résumé <span aria-hidden="true">↗</span>
         </a>

@@ -2,6 +2,7 @@ import "./globals.css";
 import { ReactNode } from "react";
 import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/react";
+import { PostHogProvider } from "./analytics/PostHogProvider";
 
 export const metadata: Metadata = {
   title: "Muhammad Khizr — Flutter & Full Stack Developer",
@@ -70,8 +71,10 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en" data-theme="light" suppressHydrationWarning>
       <body className="antialiased">
-        {children}
-        <Analytics />
+        <PostHogProvider>
+          {children}
+          <Analytics />
+        </PostHogProvider>
       </body>
     </html>
   );

@@ -7,6 +7,7 @@ import {
   feedbackRowGroups,
   orderedCarouselReviews,
 } from "./feedbackReviews";
+import { captureEvent } from "../analytics/posthog";
 
 type RowRuntimeState = {
   hover: boolean;
@@ -308,6 +309,7 @@ export default function Feedback() {
       });
     }
     setMoving(next);
+    captureEvent("feedback_motion_toggle", { moving: next });
   };
 
   const handleRowArrowClick = (rowIndex: number, direction: -1 | 1) => {
@@ -317,6 +319,10 @@ export default function Feedback() {
     if (!viewport || !rowEl || !state) return;
 
     state.manual = true;
+    captureEvent("feedback_row_arrow_click", {
+      row_index: rowIndex,
+      direction: direction > 0 ? "right" : "left",
+    });
     const firstCard = rowEl.querySelector<HTMLElement>(".review-card");
     const step = (firstCard ? firstCard.offsetWidth : 360) + 24;
     viewport.scrollBy({
@@ -335,10 +341,18 @@ export default function Feedback() {
     );
     setSlideDirection("none");
     setActiveCarouselIndex(index !== -1 ? index : 0);
+    captureEvent("feedback_review_open", {
+      review_id: review.id,
+      author: review.author,
+      platform: review.platform,
+    });
   };
 
   const handleStepCarousel = (delta: -1 | 1) => {
     setSlideDirection(delta > 0 ? "next" : "prev");
+    captureEvent("feedback_carousel_step", {
+      direction: delta > 0 ? "next" : "prev",
+    });
     setActiveCarouselIndex((current) => {
       if (current === null) return 0;
       const total = orderedCarouselReviews.length;
@@ -351,6 +365,7 @@ export default function Feedback() {
       return;
     }
     setSlideDirection(targetIndex > activeCarouselIndex ? "next" : "prev");
+    captureEvent("feedback_carousel_select_pill", { target_index: targetIndex });
     setActiveCarouselIndex(targetIndex);
   };
 

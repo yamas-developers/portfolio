@@ -1,6 +1,9 @@
+"use client";
+
 import Image from "next/image";
 import profile from "../../public/profile-portrait.webp";
 import { projectEmailHref } from "../contact-section/contactDetails";
+import { captureEvent } from "../analytics/posthog";
 
 export default function Hero() {
   return (
@@ -19,10 +22,23 @@ export default function Hero() {
           ideas into software people can use.
         </p>
         <div className="hero-actions">
-          <a className="button primary" href="#work">
+          <a
+            className="button primary"
+            href="#work"
+            onClick={() => captureEvent("view_work_click", { location: "hero" })}
+          >
             View work <span aria-hidden="true">↗</span>
           </a>
-          <a className="button secondary" href={projectEmailHref}>
+          <a
+            className="button secondary"
+            href={projectEmailHref}
+            onClick={() =>
+              captureEvent("contact_click", {
+                location: "hero",
+                target: "mailto",
+              })
+            }
+          >
             Discuss a project <span aria-hidden="true">↗</span>
           </a>
         </div>

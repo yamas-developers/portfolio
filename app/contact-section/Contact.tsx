@@ -1,4 +1,7 @@
+"use client";
+
 import { projectEmailHref } from "./contactDetails";
+import { captureEvent } from "../analytics/posthog";
 
 export default function Contact() {
   return (
@@ -19,7 +22,16 @@ export default function Contact() {
         <p>
           Tell me what you’re building, where you need help, and your timeline.
         </p>
-        <a className="button primary" href={projectEmailHref}>
+        <a
+          className="button primary"
+          href={projectEmailHref}
+          onClick={() =>
+            captureEvent("contact_click", {
+              location: "contact_section",
+              target: "mailto",
+            })
+          }
+        >
           Discuss a project <span aria-hidden="true">↗</span>
         </a>
         <p className="fiverr-note">

@@ -8,6 +8,7 @@ import {
   ProjectProps,
 } from "./projectDetails";
 import ProjectVisual, { visuals } from "./ProjectVisual";
+import { captureEvent } from "../analytics/posthog";
 
 type FilterType = "all" | "mobile" | "web";
 
@@ -49,6 +50,7 @@ export default function ProjectGrid() {
   const handleFilterChange = (nextFilter: FilterType) => {
     setActiveFilter(nextFilter);
     setShowAll(false);
+    captureEvent("work_filter_change", { filter: nextFilter });
     const nextList = orderedProjects.filter((project) => {
       if (nextFilter === "all") return true;
       if (nextFilter === "mobile") return project.id !== 12;
@@ -61,6 +63,11 @@ export default function ProjectGrid() {
   const handleToggleShowAll = () => {
     const nextShowAll = !showAll;
     setShowAll(nextShowAll);
+    captureEvent("work_toggle_projects", {
+      show_all: nextShowAll,
+      filter: activeFilter,
+      total_shown: nextShowAll ? filteredProjects.length : Math.min(INITIAL_VISIBLE_COUNT, filteredProjects.length),
+    });
     setStatusAnnouncement(
       `${
         nextShowAll
@@ -266,6 +273,14 @@ export default function ProjectGrid() {
                         href={link.href}
                         target="_blank"
                         rel="noopener noreferrer"
+                        onClick={() =>
+                          captureEvent("project_dialog_link_click", {
+                            project_id: selectedProject.id,
+                            project_name: selectedProject.name,
+                            link_label: link.label,
+                            url: link.href,
+                          })
+                        }
                       >
                         {link.label} <span aria-hidden="true">↗</span>
                       </a>
