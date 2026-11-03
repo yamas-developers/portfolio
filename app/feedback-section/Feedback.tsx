@@ -19,25 +19,49 @@ type RowRuntimeState = {
   sync: () => void;
 };
 
+function renderHighlightedQuote(quote: string, highlight?: string) {
+  if (!highlight || !quote.includes(highlight)) {
+    return quote;
+  }
+  const parts = quote.split(highlight);
+  return (
+    <>
+      {parts.map((part, index) => (
+        <span key={index}>
+          {part}
+          {index < parts.length - 1 && (
+            <mark className="quote-highlight">{highlight}</mark>
+          )}
+        </span>
+      ))}
+    </>
+  );
+}
+
 export default function Feedback() {
   const [moving, setMoving] = useState(true);
   const [activeCarouselIndex, setActiveCarouselIndex] = useState<number | null>(
     null
   );
-  const [slideDirection, setSlideDirection] = useState<"next" | "prev" | "none">(
-    "none"
-  );
+  const [slideDirection, setSlideDirection] = useState<
+    "next" | "prev" | "down" | "up" | "none"
+  >("none");
 
   const zoneRef = useRef<HTMLDivElement | null>(null);
   const boardRef = useRef<HTMLDivElement | null>(null);
   const dialogRef = useRef<HTMLDialogElement | null>(null);
   const lastTriggerRef = useRef<HTMLButtonElement | null>(null);
   const touchStartXRef = useRef<number | null>(null);
+  const touchStartYRef = useRef<number | null>(null);
+  const dotsContainerRef = useRef<HTMLDivElement | null>(null);
+  const dialogWheelCooldownRef = useRef(false);
+  const dialogWheelAccumulatorRef = useRef(0);
 
   const rowSectionRefs = useRef<(HTMLElement | null)[]>([null, null]);
   const viewportRefs = useRef<(HTMLDivElement | null)[]>([null, null]);
   const prevButtonRefs = useRef<(HTMLButtonElement | null)[]>([null, null]);
   const nextButtonRefs = useRef<(HTMLButtonElement | null)[]>([null, null]);
+  const interactionTimeoutsRef = useRef<(NodeJS.Timeout | null)[]>([null, null]);
 
   const movingRef = useRef(true);
   const reducedMotionRef = useRef(false);
@@ -105,6 +129,18 @@ export default function Feedback() {
 
     const cleanups: (() => void)[] = [];
 
+    const pauseTemporary = (rowIndex: number, durationMs = 1200) => {
+      const state = states[rowIndex];
+      if (!state) return;
+      state.manual = true;
+      if (interactionTimeoutsRef.current[rowIndex]) {
+        clearTimeout(interactionTimeoutsRef.current[rowIndex]!);
+      }
+      interactionTimeoutsRef.current[rowIndex] = setTimeout(() => {
+        state.manual = false;
+      }, durationMs);
+    };
+
     [0, 1].forEach((rowIndex) => {
       const rowEl = rowSectionRefs.current[rowIndex];
       const viewport = viewportRefs.current[rowIndex];
@@ -116,12 +152,17 @@ export default function Feedback() {
       };
       const onMouseLeave = () => {
         state.hover = false;
+        state.manual = false;
+        state.focus = false;
+        if (interactionTimeoutsRef.current[rowIndex]) {
+          clearTimeout(interactionTimeoutsRef.current[rowIndex]!);
+        }
       };
       const onFocusIn = () => {
-        state.focus = true;
+        // Only mark focused if navigating via keyboard
       };
-      const onFocusOut = (e: FocusEvent) => {
-        state.focus = rowEl.contains(e.relatedTarget as Node | null);
+      const onFocusOut = () => {
+        state.focus = false;
       };
       const onWheel = (e: WheelEvent) => {
         if (e.ctrlKey) return;
@@ -133,7 +174,7 @@ export default function Feedback() {
           (delta < 0 && viewport.scrollLeft > 1);
         if (!canScrollRow) return;
         e.preventDefault();
-        state.manual = true;
+        pauseTemporary(rowIndex, 1200);
         const unit =
           e.deltaMode === 1
             ? 18
@@ -148,18 +189,17 @@ export default function Feedback() {
       const onPointerDown = (e: PointerEvent) => {
         const target = e.target as HTMLElement | null;
         if (target?.closest(".review-card")) {
-          // Clicking a card opens the carousel dialog; do not permanently disable row auto-scroll
           return;
         }
-        state.manual = true;
+        pauseTemporary(rowIndex, 1200);
       };
       const onTouchMove = () => {
-        state.manual = true;
+        pauseTemporary(rowIndex, 1200);
       };
       const onKeyDown = (e: KeyboardEvent) => {
         if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
           e.preventDefault();
-          state.manual = true;
+          pauseTemporary(rowIndex, 1500);
           viewport.scrollBy({
             left: (e.key === "ArrowRight" ? 1 : -1) * 200,
             behavior: reducedMotionRef.current ? "auto" : "smooth",
@@ -197,6 +237,9 @@ export default function Feedback() {
         viewport.removeEventListener("touchmove", onTouchMove);
         viewport.removeEventListener("keydown", onKeyDown);
         viewport.removeEventListener("scroll", onScroll);
+        if (interactionTimeoutsRef.current[rowIndex]) {
+          clearTimeout(interactionTimeoutsRef.current[rowIndex]!);
+        }
       });
     });
 
@@ -249,7 +292,7 @@ export default function Feedback() {
           isOnScreen
         ) {
           rowStatesRef.current.forEach((row, index) => {
-            if (row.hover || row.focus || row.manual) return;
+            if (row.hover || row.manual) return;
             const viewport = viewportRefs.current[index];
             if (!viewport) return;
             const max = viewport.scrollWidth - viewport.clientWidth;
@@ -319,6 +362,13 @@ export default function Feedback() {
     if (!viewport || !rowEl || !state) return;
 
     state.manual = true;
+    if (interactionTimeoutsRef.current[rowIndex]) {
+      clearTimeout(interactionTimeoutsRef.current[rowIndex]!);
+    }
+    interactionTimeoutsRef.current[rowIndex] = setTimeout(() => {
+      state.manual = false;
+    }, 1500);
+
     captureEvent("feedback_row_arrow_click", {
       row_index: rowIndex,
       direction: direction > 0 ? "right" : "left",
@@ -348,10 +398,18 @@ export default function Feedback() {
     });
   };
 
-  const handleStepCarousel = (delta: -1 | 1) => {
-    setSlideDirection(delta > 0 ? "next" : "prev");
+  const handleStepCarousel = (
+    delta: -1 | 1,
+    orientation: "horizontal" | "vertical" = "horizontal"
+  ) => {
+    if (orientation === "vertical") {
+      setSlideDirection(delta > 0 ? "down" : "up");
+    } else {
+      setSlideDirection(delta > 0 ? "next" : "prev");
+    }
     captureEvent("feedback_carousel_step", {
       direction: delta > 0 ? "next" : "prev",
+      orientation,
     });
     setActiveCarouselIndex((current) => {
       if (current === null) return 0;
@@ -359,6 +417,49 @@ export default function Feedback() {
       return (current + delta + total) % total;
     });
   };
+
+  const handleDialogWheel = (e: React.WheelEvent<HTMLDialogElement>) => {
+    const target = e.target as HTMLElement | null;
+    if (target?.closest(".carousel-dots")) {
+      return;
+    }
+
+    const isVertical = Math.abs(e.deltaY) >= Math.abs(e.deltaX);
+    const primaryDelta = isVertical ? e.deltaY : e.deltaX;
+
+    if (Math.abs(primaryDelta) < 6) return;
+
+    dialogWheelAccumulatorRef.current += primaryDelta;
+
+    if (
+      Math.abs(dialogWheelAccumulatorRef.current) >= 30 &&
+      !dialogWheelCooldownRef.current
+    ) {
+      const step = dialogWheelAccumulatorRef.current > 0 ? 1 : -1;
+      handleStepCarousel(step, isVertical ? "vertical" : "horizontal");
+      dialogWheelCooldownRef.current = true;
+      dialogWheelAccumulatorRef.current = 0;
+
+      setTimeout(() => {
+        dialogWheelCooldownRef.current = false;
+      }, 260);
+    }
+  };
+
+  useEffect(() => {
+    if (activeCarouselIndex !== null && dotsContainerRef.current) {
+      const activeEl = dotsContainerRef.current.querySelector<HTMLElement>(
+        ".carousel-dot.is-active"
+      );
+      if (activeEl) {
+        activeEl.scrollIntoView({
+          behavior: "smooth",
+          inline: "center",
+          block: "nearest",
+        });
+      }
+    }
+  }, [activeCarouselIndex]);
 
   const handleSelectCarouselIndex = (targetIndex: number) => {
     if (activeCarouselIndex === null || targetIndex === activeCarouselIndex) {
@@ -372,6 +473,11 @@ export default function Feedback() {
   const handleCloseReview = () => {
     document.body.style.overflow = "";
     setActiveCarouselIndex(null);
+    rowStatesRef.current.forEach((row) => {
+      row.hover = false;
+      row.manual = false;
+      row.focus = false;
+    });
     const trigger = lastTriggerRef.current;
     if (trigger) {
       requestAnimationFrame(() => {
@@ -543,7 +649,7 @@ export default function Feedback() {
                                     : ""
                                 }`}
                               >
-                                “{review.quote}”
+                                “{renderHighlightedQuote(review.quote, review.highlight)}”
                               </span>
                               {review.tags.length > 0 && (
                                 <span className="card-endorsements">
@@ -571,7 +677,7 @@ export default function Feedback() {
               </div>
 
               <div className="board-note">
-                <span>Six supplied reviews. Each shown once.</span>
+                <span>17 client reviews from Fiverr and Upwork. Each shown once.</span>
                 <span>Click any card to open the review carousel ↗</span>
               </div>
             </div>
@@ -585,26 +691,45 @@ export default function Feedback() {
         className="review-dialog"
         aria-labelledby="review-title"
         onClose={handleCloseReview}
+        onWheel={handleDialogWheel}
         onKeyDown={(e) => {
           if (e.key === "ArrowLeft") {
             e.preventDefault();
-            handleStepCarousel(-1);
+            handleStepCarousel(-1, "horizontal");
           } else if (e.key === "ArrowRight") {
             e.preventDefault();
-            handleStepCarousel(1);
+            handleStepCarousel(1, "horizontal");
+          } else if (e.key === "ArrowUp") {
+            e.preventDefault();
+            handleStepCarousel(-1, "vertical");
+          } else if (e.key === "ArrowDown") {
+            e.preventDefault();
+            handleStepCarousel(1, "vertical");
           }
         }}
         onTouchStart={(e) => {
           touchStartXRef.current = e.touches[0]?.clientX ?? null;
+          touchStartYRef.current = e.touches[0]?.clientY ?? null;
         }}
         onTouchEnd={(e) => {
           const startX = touchStartXRef.current;
+          const startY = touchStartYRef.current;
           const endX = e.changedTouches[0]?.clientX ?? null;
+          const endY = e.changedTouches[0]?.clientY ?? null;
           touchStartXRef.current = null;
-          if (startX === null || endX === null) return;
-          const diff = startX - endX;
-          if (Math.abs(diff) > 44) {
-            handleStepCarousel(diff > 0 ? 1 : -1);
+          touchStartYRef.current = null;
+          if (startX === null || endX === null || startY === null || endY === null)
+            return;
+          const diffX = startX - endX;
+          const diffY = startY - endY;
+          if (Math.abs(diffX) > Math.abs(diffY)) {
+            if (Math.abs(diffX) > 36) {
+              handleStepCarousel(diffX > 0 ? 1 : -1, "horizontal");
+            }
+          } else {
+            if (Math.abs(diffY) > 36) {
+              handleStepCarousel(diffY > 0 ? 1 : -1, "vertical");
+            }
           }
         }}
         onClick={(e) => {
@@ -656,7 +781,7 @@ export default function Feedback() {
                   </span>
                   <span>{prevReview.platform}</span>
                 </span>
-                <span className="neighbor-quote">“{prevReview.quote}”</span>
+                <span className="neighbor-quote">“{renderHighlightedQuote(prevReview.quote, prevReview.highlight)}”</span>
                 <span className="neighbor-author">
                   <span className="avatar" aria-hidden="true">
                     {prevReview.author[0].toUpperCase()}
@@ -678,7 +803,7 @@ export default function Feedback() {
                   <span>{selectedReview.platform} review</span>
                   <span>★★★★★ · {selectedReview.rating} / 5</span>
                 </div>
-                <blockquote>“{selectedReview.quote}”</blockquote>
+                <blockquote>“{renderHighlightedQuote(selectedReview.quote, selectedReview.highlight)}”</blockquote>
                 <div className="full-author-row">
                   <span className="avatar" aria-hidden="true">
                     {selectedReview.author[0].toUpperCase()}
@@ -710,7 +835,7 @@ export default function Feedback() {
                   </span>
                   <span>{nextReview.platform}</span>
                 </span>
-                <span className="neighbor-quote">“{nextReview.quote}”</span>
+                <span className="neighbor-quote">“{renderHighlightedQuote(nextReview.quote, nextReview.highlight)}”</span>
                 <span className="neighbor-author">
                   <span className="avatar" aria-hidden="true">
                     {nextReview.author[0].toUpperCase()}
@@ -735,6 +860,7 @@ export default function Feedback() {
               </button>
 
               <div
+                ref={dotsContainerRef}
                 className="carousel-dots"
                 role="tablist"
                 aria-label="Choose a review"
