@@ -7,7 +7,7 @@ export const developmentExperience = [
       "Mobile experiences for Android and iOS, from onboarding and profile discovery to booking, shopping, and community features.",
     technologies: "Flutter · Dart · React Native · Expo · TypeScript",
     evidence:
-      "Selected work: She & HER, Jem.social, Watch and Check, and Abut.",
+      "Selected work: She & HER, Jem.social, Watch And Check, and Abut.",
   },
   {
     title: "Backend systems & APIs",

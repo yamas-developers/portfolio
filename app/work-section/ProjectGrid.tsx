@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import ProjectCard from "./ProjectCard";
 import {
   getProjectLinks,
@@ -26,6 +26,7 @@ function hasWebExperience(project: ProjectProps) {
 
 export default function ProjectGrid() {
   const [activeFilter, setActiveFilter] = useState<FilterType>("all");
+  const [isFiltering, setIsFiltering] = useState(false);
   const [showAll, setShowAll] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [selectedProject, setSelectedProject] = useState<ProjectProps | null>(
@@ -49,11 +50,25 @@ export default function ProjectGrid() {
 
   const initialCount = isMobile ? MOBILE_INITIAL_COUNT : DESKTOP_INITIAL_COUNT;
 
-  const filteredProjects = orderedProjects.filter((project) => {
-    if (activeFilter === "all") return true;
-    if (activeFilter === "mobile") return project.id !== 12;
-    return hasWebExperience(project);
-  });
+  const filteredProjects = useMemo(() => {
+    if (activeFilter === "all") return orderedProjects;
+    if (activeFilter === "mobile") {
+      // Lead with She & HER for Mobile apps filter so top featured project visibly changes
+      const mobiles = orderedProjects.filter((p) => p.id !== 12);
+      const lead = mobiles.find((p) => p.id === 13);
+      if (lead) {
+        return [lead, ...mobiles.filter((p) => p.id !== 13)];
+      }
+      return mobiles;
+    }
+    // Web: lead with World on Plate so top featured project visibly changes
+    const webs = orderedProjects.filter((p) => hasWebExperience(p));
+    const lead = webs.find((p) => p.id === 12);
+    if (lead) {
+      return [lead, ...webs.filter((p) => p.id !== 12)];
+    }
+    return webs;
+  }, [activeFilter]);
 
   const visibleProjects = showAll
     ? filteredProjects
@@ -64,16 +79,18 @@ export default function ProjectGrid() {
   );
 
   const handleFilterChange = (nextFilter: FilterType) => {
+    if (nextFilter === activeFilter) return;
+    setIsFiltering(true);
     setActiveFilter(nextFilter);
     setShowAll(false);
     captureEvent("work_filter_change", { filter: nextFilter });
-    const nextList = orderedProjects.filter((project) => {
-      if (nextFilter === "all") return true;
-      if (nextFilter === "mobile") return project.id !== 12;
-      return hasWebExperience(project);
-    });
-    const shown = Math.min(initialCount, nextList.length);
-    setStatusAnnouncement(`${shown} of ${nextList.length} projects shown.`);
+
+    setTimeout(() => {
+      setIsFiltering(false);
+    }, 220);
+
+    const shown = Math.min(initialCount, filteredProjects.length);
+    setStatusAnnouncement(`${shown} of ${filteredProjects.length} projects shown.`);
   };
 
   const handleToggleShowAll = () => {
@@ -153,13 +170,7 @@ export default function ProjectGrid() {
   return (
     <>
       <div className="work-heading">
-        <h2 id="work-title">
-          Selected work
-          <span className="project-count" id="project-count">
-            {filteredProjects.length}{" "}
-            {filteredProjects.length === 1 ? "project" : "projects"}
-          </span>
-        </h2>
+        <h2 id="work-title">Selected work</h2>
         <div className="filters" role="group" aria-label="Filter projects">
           <button
             type="button"
@@ -190,7 +201,9 @@ export default function ProjectGrid() {
       </p>
 
       <div
-        className={`project-grid${showAll ? " is-expanded" : ""}`}
+        className={`project-grid${showAll ? " is-expanded" : ""}${
+          isFiltering ? " is-filtering" : ""
+        }`}
         id="project-grid"
       >
         {visibleProjects.map((project, index) => (
@@ -220,8 +233,7 @@ export default function ProjectGrid() {
               </>
             ) : (
               <>
-                View all {filteredProjects.length} projects ({remainingCount}{" "}
-                more) <span aria-hidden="true">↓</span>
+                View all 15+ projects <span aria-hidden="true">↓</span>
               </>
             )}
           </button>

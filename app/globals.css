@@ -35,6 +35,7 @@
   --board: #e7eee4;
   --glow: #c5ddaa;
   --frame: #284234;
+  --card-shadow: rgba(27, 52, 38, 0.08);
   --radius: 20px;
   color-scheme: light;
   scrollbar-color: #829b85 var(--bg);
@@ -52,6 +53,7 @@
   --board: #17281d;
   --glow: #35532d;
   --frame: #4d6553;
+  --card-shadow: rgba(0, 0, 0, 0.35);
   color-scheme: dark;
   scrollbar-color: #617665 var(--bg);
 }
@@ -624,6 +626,12 @@ h2 {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 48px 28px;
+  transition: opacity 180ms ease, transform 180ms ease;
+}
+
+.project-grid.is-filtering {
+  opacity: 0.45;
+  transform: translateY(6px);
 }
 
 .project-card {
@@ -867,8 +875,9 @@ h2 {
   color: var(--muted);
 }
 
-/* Scroll-Reveal Feedback Section */
+/* Feedback Section: a moving board of every client review */
 .feedback-section {
+  --pin-top: 92px;
   padding-block: 72px 104px;
   border-top: 1px solid var(--line);
 }
@@ -885,26 +894,69 @@ h2 {
   color: var(--ink);
 }
 
-.feedback-heading > p {
-  max-width: 280px;
-  color: var(--muted);
+.feedback-lede {
+  max-width: 420px;
+  margin-top: 16px;
   font-size: 14px;
+  color: var(--muted);
 }
 
-.reveal-zone {
-  max-width: 1160px;
-  margin-inline: auto;
-  padding-top: 12px;
-  padding-bottom: 24px;
+.feedback-stats {
+  display: flex;
+  margin: 0;
+  padding-bottom: 4px;
 }
 
-.perspective {
-  perspective: 1400px;
+.feedback-stats > div {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 6px;
+  padding-inline: 26px;
+  border-left: 1px solid var(--line);
+}
+
+.feedback-stats > div:first-child {
+  padding-left: 0;
+  border-left: 0;
+}
+
+.feedback-stats > div:last-child {
+  padding-right: 0;
+}
+
+.feedback-stats dd {
+  margin: 0;
+  font-size: 34px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+}
+
+.feedback-stats dt {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.stat-star {
+  margin-left: 4px;
+  font-size: 0.6em;
+  letter-spacing: 0;
+  vertical-align: 0.3em;
+  color: var(--focus);
+}
+
+/* Every width: the board pins under the header while the page scroll
+   moves the lists. The zone's height sets how long it stays pinned. */
+.pin-zone.is-pinned .board {
+  position: sticky;
+  top: var(--pin-top);
 }
 
 .board {
   transform-origin: 50% 0;
-  transform: rotateX(24deg) scale(0.91);
   border: 5px solid var(--frame);
   border-radius: 24px;
   background: var(--board);
@@ -914,162 +966,243 @@ h2 {
 
 .board-header {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
-  gap: 20px;
+  gap: 12px 20px;
+  padding: 14px 20px;
   background: var(--paper);
-  padding: 18px 24px;
-  border-radius: 18px 18px 0 0;
   border-bottom: 1px solid var(--line);
+  border-radius: 19px 19px 0 0;
 }
 
-.board-header > div {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  flex-wrap: wrap;
+/* The Work section's filters go full width on phones; here they stay
+   compact so the buttons fit on the same row. */
+.board-header .filters {
+  width: auto;
 }
 
-.status-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #6a9852;
-  display: inline-block;
+.board-header .filters button {
+  flex: none;
 }
 
-.board-header h3 {
-  font-size: 13px;
-  font-weight: 700;
-}
-
-.source {
+.filter-count {
+  margin-left: 4px;
   font-size: 11px;
+  font-weight: 500;
   color: var(--muted);
-  padding-left: 12px;
-  border-left: 1px solid var(--line);
+  font-variant-numeric: tabular-nums;
 }
 
-.board-header button {
-  border: 1px solid var(--line);
+.board-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.board-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 38px;
+  padding: 6px 14px;
   background: var(--surface);
-  border-radius: 6px;
-  padding: 6px 12px;
-  min-height: 36px;
-  font-size: 11px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  font-size: 12px;
   font-weight: 500;
   white-space: nowrap;
 }
 
-.board-header button:hover {
+.board-button:hover {
   border-color: var(--focus);
+}
+
+.board-button > span[aria-hidden="true"] {
+  width: 12px;
+  text-align: center;
 }
 
 .board-content {
-  padding: 30px 28px 18px;
-  overflow: hidden;
-  border-radius: 0 0 18px 18px;
-  background: radial-gradient(ellipse at 50% 70%, var(--glow), transparent 73%),
+  padding-inline: 14px;
+  border-radius: 0 0 19px 19px;
+  background: radial-gradient(ellipse at 50% 55%, var(--glow), transparent 72%),
     var(--board);
 }
 
-.board-copy {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 24px;
-  margin-bottom: 24px;
-  padding: 0 4px;
+.wall-frame {
+  position: relative;
 }
 
-.board-copy h3 {
-  font-size: 27px;
-  line-height: 1.14;
-  letter-spacing: -0.04em;
+.wall-frame.has-rail .wall {
+  padding-right: 52px;
 }
 
-.board-copy p {
-  font-size: 12px;
-  color: var(--muted);
-  line-height: 1.7;
-  text-align: right;
-}
-
-.board-copy p span {
-  font-size: 11px;
-}
-
-.review-row + .review-row {
-  margin-top: 24px;
-}
-
-.row-toolbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 0 4px 8px;
-}
-
-.row-label {
-  font-size: 11px;
-  font-weight: 500;
-  color: var(--muted);
-}
-
-.row-buttons {
-  display: flex;
-  gap: 7px;
-}
-
-.row-buttons button {
+.wall {
+  --gap: 24px;
   display: grid;
-  place-items: center;
+  grid-template-columns: repeat(var(--cols, 3), minmax(0, 1fr));
+  align-items: start;
+  gap: var(--gap);
+  padding-inline: 10px;
+  transition: opacity 200ms ease;
+}
+
+.wall.is-leaving {
+  opacity: 0;
+}
+
+.wall.is-moving {
+  height: var(--wall-h);
+  overflow: hidden;
+  overflow: clip;
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    #000 72px,
+    #000 calc(100% - 72px),
+    transparent
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    #000 72px,
+    #000 calc(100% - 72px),
+    transparent
+  );
+}
+
+.wall:not(.is-moving) {
+  padding-block: 24px 4px;
+}
+
+.wall.is-single {
+  max-width: 460px;
+  margin-inline: auto;
+}
+
+.wall-col {
+  min-width: 0;
+  container-type: inline-size;
+}
+
+.wall-track {
+  position: relative;
+}
+
+.wall.is-moving .wall-track {
+  will-change: transform;
+}
+
+.wall-set {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+}
+
+.wall.is-moving .wall-set {
+  padding-bottom: var(--gap);
+}
+
+/* Side rail: drag it, wheel over it, or use the arrow keys */
+.rail {
+  --thumb: 48px;
+  position: absolute;
+  top: 16px;
+  right: 10px;
+  bottom: 16px;
   width: 30px;
-  height: 30px;
   background: var(--paper);
   border: 1px solid var(--line);
-  border-radius: 50%;
-  font-size: 15px;
+  border-radius: 15px;
+  touch-action: none;
+  cursor: grab;
 }
 
-.row-buttons button:hover:not(:disabled) {
-  border-color: var(--focus);
+.rail:active {
+  cursor: grabbing;
 }
 
-.row-buttons button:disabled {
-  opacity: 0.35;
-  cursor: default;
+.rail:focus-visible {
+  outline-offset: 3px;
 }
 
-.row-window {
-  overflow-x: auto;
-  overflow-y: hidden;
-  padding: 6px 4px 12px;
-  scrollbar-width: thin;
-  scrollbar-color: #819a7d transparent;
-  overscroll-behavior-x: contain;
-  touch-action: pan-x pan-y;
-  scroll-padding-inline: 4px;
+.rail-marks {
+  position: absolute;
+  inset: calc(var(--thumb) / 2) 0;
+  pointer-events: none;
 }
 
-.row-track {
-  display: flex;
-  gap: 24px;
-  width: max-content;
+.rail-marks span {
+  position: absolute;
+  left: 0;
+  right: 0;
+  transform: translateY(-50%);
+  text-align: center;
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--muted);
+}
+
+.rail-thumb {
+  position: absolute;
+  top: 0;
+  left: 3px;
+  right: 3px;
+  height: var(--thumb);
+  background: var(--ink);
+  border-radius: 12px;
+  opacity: 0.82;
+  box-shadow: 0 4px 10px #1834232e;
+  pointer-events: none;
+}
+
+.rail:hover .rail-thumb,
+.rail:active .rail-thumb {
+  opacity: 1;
+}
+
+/* Floating Levitate Keyframes (Medium vibration & gentle organic drift) */
+@keyframes float-levitate-med-a {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+    box-shadow: 0 4px 14px var(--card-shadow);
+  }
+  50% {
+    transform: translateY(-11px) rotate(1.2deg);
+    box-shadow: 0 16px 30px rgba(0, 0, 0, 0.16);
+  }
+}
+
+@keyframes float-levitate-med-b {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+    box-shadow: 0 4px 14px var(--card-shadow);
+  }
+  50% {
+    transform: translateY(-9.5px) rotate(-1.1deg);
+    box-shadow: 0 15px 28px rgba(0, 0, 0, 0.15);
+  }
+}
+
+@keyframes float-levitate-med-c {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+    box-shadow: 0 4px 14px var(--card-shadow);
+  }
+  50% {
+    transform: translateY(-12px) rotate(0.95deg);
+    box-shadow: 0 18px 32px rgba(0, 0, 0, 0.17);
+  }
 }
 
 .review-card {
-  flex: 0 0 auto;
-  min-width: 0;
-  overflow: hidden;
+  position: relative;
   display: flex;
   flex-direction: column;
-  align-items: stretch;
-  text-align: left;
-  width: 430px;
-  height: 224px;
+  width: 100%;
   padding: 22px;
+  text-align: left;
   background: var(--paper);
   border: 1px solid var(--line);
   border-radius: 14px;
@@ -1078,23 +1211,119 @@ h2 {
     transform 260ms cubic-bezier(0.2, 0.75, 0.25, 1);
 }
 
-.row-track.is-animating .review-card:nth-child(odd) {
-  animation: cardGentleFloat 5.2s ease-in-out infinite alternate;
+/* Floating Levitation (Medium speed across Home and Explore) */
+.explore-wall .review-card,
+.wall .review-card {
+  animation: float-levitate-med-a 3.2s ease-in-out infinite;
+  will-change: transform, box-shadow;
 }
 
-.row-track.is-animating .review-card:nth-child(even) {
-  animation: cardGentleFloat 5.2s ease-in-out 2.6s infinite alternate;
+.explore-wall .review-card:nth-child(2n),
+.wall .review-card:nth-child(2n) {
+  animation-name: float-levitate-med-b;
+  animation-duration: 3.5s;
+  animation-delay: -1.1s;
 }
 
-.review-row:hover .review-card,
-.review-row:focus-within .review-card {
-  animation: none;
+.explore-wall .review-card:nth-child(3n),
+.wall .review-card:nth-child(3n) {
+  animation-name: float-levitate-med-c;
+  animation-duration: 3.0s;
+  animation-delay: -1.9s;
 }
 
-.review-card:hover {
-  border-color: #7b9a6a;
-  box-shadow: 0 10px 24px #1b34261c;
-  transform: translateY(-3px);
+.explore-wall .review-card:nth-child(4n),
+.wall .review-card:nth-child(4n) {
+  animation-duration: 3.3s;
+  animation-delay: -0.6s;
+}
+
+/* Hover animation feedback */
+.explore-wall .review-card:hover:not(.is-free-dragging) {
+  animation-play-state: paused !important;
+  transform: translateY(-6px) scale(1.025) !important;
+  box-shadow: 0 20px 38px rgba(0, 0, 0, 0.18), 0 4px 10px rgba(0, 0, 0, 0.08) !important;
+  border-color: #6a9852cc !important;
+  z-index: 30;
+}
+
+.wall .review-card:hover {
+  animation-play-state: paused !important;
+  transform: translateY(-6px) scale(1.02) !important;
+  box-shadow: 0 18px 34px rgba(0, 0, 0, 0.16) !important;
+  border-color: #6a9852cc !important;
+  z-index: 20;
+}
+
+.review-card:focus-visible {
+  outline-offset: 3px;
+}
+
+/* Playful "DRAG ME" pill badge from Chispa reference - appears ONLY on hover in explore mode */
+.card-drag-pill {
+  position: absolute;
+  top: -8px;
+  right: 18px;
+  background: #facc15;
+  color: #1a1a1a;
+  font-family: inherit;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  padding: 3px 9px;
+  border-radius: 999px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.16);
+  border: 1.5px solid var(--paper);
+  pointer-events: none;
+  z-index: 4;
+  transform: rotate(3deg);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 160ms ease, visibility 160ms ease,
+    transform 180ms cubic-bezier(0.34, 1.56, 0.64, 1), background-color 150ms ease;
+}
+
+.explore-wall .review-card:hover .card-drag-pill,
+.explore-wall .review-card.is-free-dragging .card-drag-pill {
+  opacity: 1;
+  visibility: visible;
+  transform: scale(1.08) rotate(-2deg);
+  background: #fde047;
+}
+
+/* Ensure no drag button ever renders on the home landing page */
+.wall .card-drag-pill,
+.feedback-grid .card-drag-pill {
+  display: none !important;
+}
+
+/* Free 2D Drag and drop in explore mode */
+.explore-wall .review-card {
+  position: relative;
+  max-width: 420px;
+  width: 100%;
+  margin-inline: auto;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: grab;
+  will-change: translate, rotate, transform, box-shadow;
+  transition: transform 220ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 220ms ease, border-color 220ms ease, opacity 180ms ease;
+}
+
+.explore-wall .review-card:active {
+  cursor: grabbing;
+}
+
+.explore-wall .review-card.is-free-dragging {
+  cursor: grabbing !important;
+  z-index: 10000 !important;
+  box-shadow: 0 28px 50px rgba(0, 0, 0, 0.28), 0 10px 20px rgba(0, 0, 0, 0.16) !important;
+  opacity: 0.98 !important;
+  transition: none !important;
+  animation-play-state: paused !important;
 }
 
 .card-rating {
@@ -1113,46 +1342,34 @@ h2 {
 }
 
 .card-quote {
-  overflow-wrap: anywhere;
-  font-size: 14px;
-  line-height: 1.55;
-  margin-top: 12px;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 4;
-  overflow: hidden;
+  margin-top: 14px;
+  font-size: 15px;
+  line-height: 1.6;
   letter-spacing: -0.012em;
   color: var(--ink);
+  overflow-wrap: anywhere;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 7;
+  overflow: hidden;
 }
 
-.card-quote.card-quote-tagged {
-  -webkit-line-clamp: 3;
-}
-
-.card-endorsements {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-top: 8px;
-}
-
-.card-endorsements span {
-  padding: 2px 7px;
-  background: var(--board);
-  border-radius: 4px;
-  font-size: 10px;
+/* Short quotes are set large, so one-liners read like a headline */
+.review-card.is-short .card-quote {
+  font-size: 22px;
+  line-height: 1.3;
   font-weight: 500;
-  color: var(--ink);
+  letter-spacing: -0.025em;
 }
 
 .card-author {
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-top: auto;
-  padding-top: 10px;
-  font-size: 12px;
+  margin-top: 18px;
+  font-size: 13px;
   font-weight: 700;
+  overflow-wrap: anywhere;
 }
 
 .avatar {
@@ -1170,19 +1387,316 @@ h2 {
 .card-author small {
   display: block;
   color: var(--muted);
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 400;
   margin-top: 1px;
 }
 
+/* Narrow lists (3 or 4 on smaller laptops) get tighter cards */
+@container (max-width: 250px) {
+  .review-card {
+    padding: 16px;
+  }
+  .card-quote {
+    font-size: 14px;
+  }
+  .review-card.is-short .card-quote {
+    font-size: 19px;
+  }
+}
+
+/* Phones: tighter cards, so more of them fit on the pinned board */
+@media (max-width: 600px) {
+  .wall .review-card {
+    padding: 18px;
+  }
+  .wall .card-quote {
+    font-size: 14px;
+    -webkit-line-clamp: 5;
+  }
+  .wall .review-card.is-short .card-quote {
+    font-size: 19px;
+  }
+
+  /* Explore on mobile (<= 600px): full screen mode of home screen version */
+  .explore-top {
+    padding: 12px 16px;
+    gap: 10px;
+  }
+  .explore-brand h2 {
+    font-size: 15px;
+  }
+  .explore-brand p {
+    font-size: 11px;
+  }
+  .explore-filters {
+    order: 3;
+    width: 100%;
+    overflow-x: auto;
+    padding-bottom: 2px;
+  }
+  .explore-actions {
+    margin-left: auto;
+  }
+  .explore-action-btn {
+    min-height: 32px;
+    padding: 4px 10px;
+    font-size: 11px;
+  }
+  .explore-wall {
+    grid-template-columns: 1fr !important;
+    padding: 24px 16px 80px;
+    gap: 16px;
+  }
+  .explore-wall.is-moving {
+    margin-top: -96px;
+    padding-top: 110px;
+  }
+  .explore-wall .review-card {
+    max-width: 100% !important;
+    cursor: pointer !important;
+    touch-action: pan-y !important;
+    user-select: auto !important;
+    -webkit-user-select: auto !important;
+  }
+  .card-drag-pill {
+    display: none !important;
+  }
+}
+
 .board-note {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
-  gap: 18px;
-  font-size: 11px;
+  gap: 6px 24px;
+  padding: 16px 10px 18px;
+  font-size: 12px;
   color: var(--muted);
-  margin-top: 18px;
-  padding: 0 4px;
+}
+
+.note-touch,
+.board.is-still .pause-hint,
+.board.is-pinned .drag-hint,
+.board:not(.is-pinned) .scroll-hint {
+  display: none;
+}
+
+@media (hover: none) {
+  .note-hover {
+    display: none;
+  }
+  .note-touch {
+    display: inline;
+  }
+}
+
+/* Explore: the whole board full screen, scrolled on its own */
+.explore {
+  width: 100%;
+  max-width: none;
+  height: 100dvh;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: radial-gradient(ellipse at 50% 30%, var(--glow), transparent 70%)
+      fixed,
+    var(--board);
+  color: var(--ink);
+  border: 0;
+}
+
+.explore::backdrop {
+  background: #07130f99;
+}
+
+.explore-top {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px 20px;
+  padding: 14px 28px;
+  background: color-mix(in srgb, var(--paper) 78%, transparent);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1px solid color-mix(in srgb, var(--line) 65%, transparent);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
+}
+
+.explore-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.explore-top h2 {
+  font-size: 16px;
+  line-height: 1.3;
+}
+
+.explore-top p {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.explore-filters {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.explore-filters .filter {
+  min-height: 34px;
+  padding: 4px 12px;
+  font-size: 12px;
+}
+
+.explore-filters .filter .count {
+  font-size: 11px;
+}
+
+.explore-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.explore-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 36px;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 500;
+  border-radius: 9px;
+  background: color-mix(in srgb, var(--surface) 85%, transparent);
+  border: 1px solid color-mix(in srgb, var(--line) 80%, transparent);
+  color: var(--ink);
+  cursor: pointer;
+  transition: all 160ms ease;
+}
+
+.explore-action-btn:hover {
+  border-color: var(--focus);
+  background: var(--surface);
+  transform: translateY(-1px);
+}
+
+.explore-action-btn:active {
+  transform: translateY(0);
+}
+
+.explore-action-btn .explore-btn-icon {
+  font-size: 13px;
+  line-height: 1;
+}
+
+.explore-action-btn#explore-autoscroll[aria-pressed="true"] {
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--ink);
+}
+
+.explore-action-btn#explore-autoscroll[aria-pressed="true"] .explore-btn-icon {
+  color: #6a9852;
+}
+
+.explore-reset-btn .explore-btn-icon {
+  transition: transform 350ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.explore-reset-btn.is-spinning .explore-btn-icon {
+  transform: rotate(-360deg);
+}
+
+.explore-wall {
+  display: grid;
+  grid-template-columns: repeat(var(--cols, 3), minmax(0, 1fr));
+  align-items: start;
+  gap: 24px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: 28px 28px 96px;
+  overflow: visible;
+  transition: opacity 200ms ease;
+}
+
+/* Explore mode autoscroll: alternating drifting lists in seamless loop */
+.explore.is-autoscrolling {
+  overflow: hidden;
+}
+
+.explore-wall.is-moving {
+  height: 100dvh;
+  max-height: none;
+  overflow: hidden;
+  margin-top: -68px; /* sits behind the frosted glass top bar */
+  padding-top: 86px; /* provides clearance so top cards glide behind the bar */
+  padding-bottom: 48px;
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0px,
+    #000 16px,
+    #000 calc(100% - 56px),
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0px,
+    #000 16px,
+    #000 calc(100% - 56px),
+    transparent 100%
+  );
+}
+
+.explore-wall.is-moving .explore-col {
+  margin-top: 0 !important;
+}
+
+.explore-wall.is-moving .explore-track {
+  will-change: transform;
+}
+
+.explore-wall:not(.is-moving) .explore-set.is-copy {
+  display: none !important;
+}
+
+.explore-wall:not(.is-moving) .explore-track {
+  transform: none !important;
+}
+
+.explore-col {
+  min-width: 0;
+  position: relative;
+  overflow: visible;
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Stagger every other column gently in static mode */
+.explore-wall:not(.is-moving) .explore-col:nth-child(even) {
+  margin-top: 40px;
+}
+
+.explore-track {
+  position: relative;
+  overflow: visible;
+}
+
+.explore-set {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  overflow: visible;
 }
 
 /* Contact Section */
@@ -1403,7 +1917,24 @@ h2 {
   border-color: var(--focus);
 }
 
+/* Header and controls always stay in view; on short screens the middle
+   scrolls instead of pushing Prev / Next out of sight. */
+.review-dialog[open] {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.review-dialog .dialog-header,
+.review-dialog .carousel-controls {
+  flex: none;
+}
+
 .review-carousel-stage {
+  flex: 0 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
   display: grid;
   grid-template-columns: minmax(190px, 0.85fr) minmax(320px, 1.55fr) minmax(
       190px,
@@ -1483,6 +2014,32 @@ h2 {
   font-size: 9px;
   font-weight: 400;
   color: var(--muted);
+}
+
+.review-carousel-stage.is-single {
+  grid-template-columns: minmax(0, 640px);
+  justify-content: center;
+}
+
+.review-carousel-stage.is-single .carousel-neighbor {
+  display: none;
+}
+
+/* Every review sits in this one cell, hidden but for the active one, so the
+   cell is as tall as the longest review. The card fits its own text while
+   the popup keeps one size, and Prev / Next never move. */
+.carousel-slot {
+  display: grid;
+  align-items: center;
+  min-width: 0;
+}
+
+.carousel-slot > .carousel-active-card {
+  grid-area: 1 / 1;
+}
+
+.carousel-active-card.is-spacer {
+  visibility: hidden;
 }
 
 .carousel-active-card {
@@ -1676,14 +2233,14 @@ h2 {
       translate: 0 0;
     }
   }
-  @keyframes cardGentleFloat {
+  .wall.is-entering .wall-col {
+    animation: feedbackColumnIn 760ms cubic-bezier(0.2, 0.75, 0.25, 1) both;
+    animation-delay: calc(var(--i) * 110ms);
+  }
+  @keyframes feedbackColumnIn {
     from {
-      box-shadow: 0 3px 10px #1b34260a;
-      border-color: var(--line);
-    }
-    to {
-      box-shadow: 0 8px 18px #1b342616;
-      border-color: #a8be9a;
+      opacity: 0;
+      transform: translateY(28px);
     }
   }
   @keyframes carouselSlideNext {
@@ -1758,43 +2315,43 @@ h2 {
 }
 
 @media (max-width: 800px) {
-  .board-content {
-    padding: 24px 18px 16px;
-  }
-  .board-header {
-    padding: 14px 18px;
-  }
-  .board-copy h3 {
-    font-size: 24px;
-  }
-  .board-copy p {
-    font-size: 11px;
-  }
-  .review-card {
-    width: 330px;
-    height: 232px;
-  }
-  .row-track {
-    gap: 24px;
-  }
   .review-carousel-stage {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 14px;
     padding: 18px 16px 14px;
   }
-  .carousel-active-card {
+  .carousel-slot {
     grid-column: 1 / -1;
     order: -1;
+  }
+  .carousel-active-card {
     padding: 22px;
   }
+  /* A fixed height here too, so the controls below never shift */
   .carousel-neighbor {
-    transform: none;
-    min-height: 150px;
+    height: 160px;
+    min-height: 0;
     padding: 14px;
+    overflow: hidden;
+    transform: none;
+  }
+  .carousel-neighbor:hover,
+  .carousel-neighbor:focus-visible {
+    transform: none;
   }
   .neighbor-quote {
-    -webkit-line-clamp: 3;
+    flex-shrink: 0;
+    -webkit-line-clamp: 2;
     font-size: 12px;
+  }
+  .neighbor-author > span:last-child {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .neighbor-author small {
+    display: none;
   }
 }
 
@@ -1962,16 +2519,26 @@ h2 {
     line-height: 1.3;
   }
   .feedback-section {
+    --pin-top: 80px;
     padding-block: 48px 68px;
   }
   .feedback-heading {
     flex-direction: column;
     align-items: flex-start;
-    gap: 14px;
+    gap: 24px;
     margin-bottom: 24px;
   }
   .feedback-heading h2 {
     font-size: 31px;
+  }
+  .feedback-lede {
+    margin-top: 12px;
+  }
+  .feedback-stats dd {
+    font-size: 28px;
+  }
+  .feedback-stats > div {
+    padding-inline: 20px;
   }
   .contact-section {
     grid-template-columns: 1fr;
@@ -2033,73 +2600,66 @@ h2 {
   .shell {
     width: calc(100% - 28px);
   }
+  .feedback-stats > div {
+    padding-inline: 16px;
+  }
+  .feedback-stats dd {
+    font-size: 26px;
+  }
+  .feedback-stats dt {
+    font-size: 11px;
+  }
   .board {
     border-width: 3px;
     border-radius: 19px;
   }
   .board-header {
-    border-radius: 15px 15px 0 0;
-    padding: 12px;
+    padding: 10px;
+    border-radius: 16px 16px 0 0;
   }
-  .board-header > div {
-    gap: 7px;
+  .board-header .filters button {
+    padding-inline: 10px;
   }
-  .board-header h3 {
-    font-size: 11px;
+  /* Icons only, so the filters and buttons share one row */
+  .board-button {
+    justify-content: center;
+    min-width: 40px;
+    padding-inline: 6px;
   }
-  .source {
-    font-size: 9px;
-    padding-left: 7px;
+  .board-button > span:not([aria-hidden]) {
+    display: none;
   }
-  .board-header button {
-    font-size: 10px;
-    padding: 5px 8px;
+  .board-button > span[aria-hidden="true"] {
+    width: auto;
+    font-size: 15px;
   }
   .board-content {
-    padding: 22px 10px 14px;
+    padding-inline: 4px;
+    border-radius: 0 0 16px 16px;
   }
-  .board-copy {
-    display: block;
-    padding-inline: 6px;
-    margin-bottom: 20px;
+  .wall {
+    --gap: 16px;
+    padding-inline: 8px;
   }
-  .board-copy h3 {
-    font-size: 24px;
+  .wall-frame.has-rail .wall {
+    padding-right: 40px;
   }
-  .board-copy p {
-    margin-top: 10px;
-    font-size: 11px;
-    text-align: left;
+  .rail {
+    --thumb: 44px;
+    right: 6px;
+    width: 26px;
   }
   .review-card {
-    width: min(280px, calc(100vw - 76px));
-    height: 244px;
     padding: 20px;
   }
-  .card-quote {
-    font-size: 14px;
-    -webkit-line-clamp: 5;
-  }
-  .card-quote.card-quote-tagged {
-    -webkit-line-clamp: 3;
-  }
-  .row-track {
-    gap: 24px;
-  }
-  .review-row + .review-row {
-    margin-top: 24px;
-  }
   .board-note {
-    font-size: 10px;
-    flex-direction: column;
-    gap: 5px;
-    margin-top: 14px;
-    padding-inline: 6px;
+    padding-inline: 8px;
+    font-size: 11px;
   }
   .dialog-header {
     padding: 14px 16px;
   }
-  #full-review {
+  .carousel-active-card {
     padding: 20px;
   }
   .review-dialog blockquote {
@@ -2128,6 +2688,9 @@ h2 {
 @media (max-width: 380px) {
   .shell {
     width: calc(100% - 24px);
+  }
+  .filter-count {
+    display: none;
   }
   .nav {
     gap: 8px;
@@ -2167,6 +2730,13 @@ h2 {
   *::after {
     animation: none !important;
     transition: none !important;
+  }
+}
+
+@media (pointer: coarse) {
+  .board-button {
+    min-width: 44px;
+    min-height: 44px;
   }
 }
 
