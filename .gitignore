@@ -19,6 +19,7 @@
 .DS_Store
 *.pem
 *.tsbuildinfo
+.claude/
 
 # local docs, prototypes, and backups
 /docs

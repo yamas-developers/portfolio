@@ -125,7 +125,7 @@ export const additionalProjects: ProjectProps[] = [
   },
   {
     id: 4,
-    name: "Watch and Check",
+    name: "Watch And Check",
     role: "Full stack developer",
     category: "Watch collecting",
     description:
@@ -229,12 +229,59 @@ export const additionalProjects: ProjectProps[] = [
     apk: null,
     ios: null,
   },
+  {
+    id: 14,
+    name: "Bible Alert",
+    role: "Full stack developer",
+    category: "Faith & inspiration",
+    description:
+      "Find inspiration from quotes that revolve around Bible teachings. Personalize your notifications to either daily or weekly, and choose the time that suits you best.",
+    technologies: ["Flutter", "Laravel"],
+    github: null,
+    image: null,
+    available: true,
+    demo: null,
+    apk: "https://play.google.com/store/apps/details?id=com.bible.versealert&pcampaignid=web_share",
+    ios: null,
+  },
+  {
+    id: 15,
+    name: "Ramsons Delivery",
+    role: "Full stack developer",
+    category: "Supermarket & takeaway",
+    description:
+      "Your one-stop shop for supermarkets and takeaways with fresh produce, groceries, takeaway meals, and fast, reliable delivery.",
+    technologies: ["Flutter", "Laravel"],
+    github: null,
+    image: null,
+    available: true,
+    demo: null,
+    apk: null,
+    ios: null,
+  },
+  {
+    id: 16,
+    name: "Tengai POS",
+    role: "Full stack developer",
+    category: "Point of sale",
+    description:
+      "Modern point-of-sale platform for retail and hospitality with real-time inventory management, sales tracking, and multi-platform support.",
+    technologies: ["Flutter", "Firebase"],
+    github: null,
+    image: null,
+    available: true,
+    demo: "https://tengaipos.com/",
+    apk: "https://play.google.com/store/apps/details?id=com.tengai.pos&pcampaignid=web_share",
+    ios: "https://apps.apple.com/zw/app/tengai-pos/id6792802010",
+  },
 ];
 
 // Approved homepage order:
-// Jem.social → She & HER → Watch and Check → Abut → PICH → Butler,
+// Jem.social → She & HER → Watch And Check → Abut → PICH → Butler,
 // followed by all remaining projects.
-export const projectOrderIds = [8, 13, 4, 6, 0, 1, 5, 9, 11, 12, 7, 2, 3];
+export const projectOrderIds = [
+  8, 13, 4, 6, 0, 1, 16, 15, 14, 5, 9, 11, 12, 7, 2, 3,
+];
 
 const projectPool = [...additionalProjects, ...devProjects];
 

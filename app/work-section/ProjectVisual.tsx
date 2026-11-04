@@ -29,6 +29,15 @@ import worldOnPlateMobile from "../../public/projects/portfolio/world-on-plate-m
 import sheHerWebsite from "../../public/projects/portfolio/she-and-her-website.webp";
 import sheHerWelcome from "../../public/projects/portfolio/she-and-her-welcome.webp";
 import sheHerDiscovery from "../../public/projects/portfolio/she-and-her-discovery.webp";
+import bibleAlertOne from "../../public/projects/portfolio/bible-alert-1.png";
+import bibleAlertTwo from "../../public/projects/portfolio/bible-alert-2.png";
+import bibleAlertThree from "../../public/projects/portfolio/bible-alert-3.png";
+import ramsonsOne from "../../public/projects/portfolio/ramsons-1.png";
+import ramsonsTwo from "../../public/projects/portfolio/ramsons-2.png";
+import ramsonsThree from "../../public/projects/portfolio/ramsons-3.png";
+import tengaiOne from "../../public/projects/portfolio/tengai-pos-1.png";
+import tengaiTwo from "../../public/projects/portfolio/tengai-pos-2.png";
+import tengaiThree from "../../public/projects/portfolio/tengai-pos-3.png";
 
 export type VisualFormat =
   | "screens"
@@ -113,15 +122,15 @@ export const visuals: Record<number, Visual> = {
     images: [
       {
         src: watchWebsite,
-        alt: "Watch and Check website presenting watch component comparison and three app screens",
+        alt: "Watch And Check website presenting watch component comparison and three app screens",
       },
       {
         src: watchAppOne,
-        alt: "Watch and Check app brand discovery and search",
+        alt: "Watch And Check app brand discovery and search",
       },
       {
         src: watchAppTwo,
-        alt: "Watch and Check app watch details and reference lookup",
+        alt: "Watch And Check app watch details and reference lookup",
       },
     ],
     background: "#101010",
@@ -227,6 +236,63 @@ export const visuals: Record<number, Visual> = {
     background: "#34372b",
     format: "website",
     caption: "Live website · Desktop & mobile",
+  },
+  14: {
+    images: [
+      {
+        src: bibleAlertOne,
+        alt: "Bible Alert home interface with daily Bible teachings and alerts",
+      },
+      {
+        src: bibleAlertTwo,
+        alt: "Bible Alert verse reader and reflection interface",
+      },
+      {
+        src: bibleAlertThree,
+        alt: "Bible Alert reminder and notification customization screen",
+      },
+    ],
+    background: "#2a3d34",
+    format: "posters",
+    caption: "Mobile app · Quotes & alerts",
+  },
+  15: {
+    images: [
+      {
+        src: ramsonsOne,
+        alt: "Ramsons Delivery supermarket essentials and product catalog",
+      },
+      {
+        src: ramsonsTwo,
+        alt: "Ramsons Delivery takeaway food ordering and dish selection",
+      },
+      {
+        src: ramsonsThree,
+        alt: "Ramsons Delivery checkout and fast order dispatch",
+      },
+    ],
+    background: "#3e2723",
+    format: "posters",
+    caption: "Mobile app · Supermarket & takeaway",
+  },
+  16: {
+    images: [
+      {
+        src: tengaiOne,
+        alt: "Tengai POS point-of-sale terminal and cashier checkout",
+      },
+      {
+        src: tengaiTwo,
+        alt: "Tengai POS product inventory and stock management",
+      },
+      {
+        src: tengaiThree,
+        alt: "Tengai POS sales reporting and transaction receipts",
+      },
+    ],
+    background: "#1f2937",
+    format: "posters",
+    caption: "Mobile & POS interface",
   },
 };
 
