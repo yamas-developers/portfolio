@@ -11,6 +11,15 @@ export default function GlassCardMotionManager() {
   useEffect(() => {
     if (typeof window === "undefined") return;
 
+    // Mobile / touch safety check: phones and touch tablets should use 100% native hardware scrolling
+    // without heavy JS scroll listeners, 3D perspective transforms, or layout thrashing that cause WebKit GPU crashes.
+    const isTouchOrMobile =
+      window.matchMedia("(hover: none)").matches ||
+      window.matchMedia("(max-width: 768px)").matches ||
+      "ontouchstart" in window;
+
+    if (isTouchOrMobile) return;
+
     let activeCard: HTMLElement | null = null;
     let cardRect: DOMRect | null = null;
     let glareEl: HTMLElement | null = null;

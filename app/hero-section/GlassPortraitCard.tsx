@@ -11,6 +11,7 @@ export default function GlassPortraitCard() {
   const [glarePos, setGlarePos] = useState({ x: 50, y: 50, opacity: 0 });
 
   const handlePointerMove = (e: PointerEvent<HTMLDivElement>) => {
+    if (typeof window !== "undefined" && window.matchMedia("(hover: none)").matches) return;
     const card = cardRef.current;
     if (!card) return;
 

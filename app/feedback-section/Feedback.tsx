@@ -674,9 +674,9 @@ export default function Feedback() {
       typeof window !== "undefined"
         ? parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--feedback-pin-multiplier"))
         : 4.0;
-    const pinMultiplier = !isNaN(pinMultiplierRaw) && pinMultiplierRaw > 0
-      ? pinMultiplierRaw
-      : (viewport.wide ? 4.0 : PHONE_PIN_SCREENS);
+    const pinMultiplier = viewport.wide
+      ? (!isNaN(pinMultiplierRaw) && pinMultiplierRaw > 0 ? pinMultiplierRaw : 4.0)
+      : PHONE_PIN_SCREENS;
 
     const pinDistance = pinned
       ? Math.min(
