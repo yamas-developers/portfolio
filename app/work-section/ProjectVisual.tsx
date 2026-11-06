@@ -1,6 +1,5 @@
 import Image, { StaticImageData } from "next/image";
 import type { CSSProperties } from "react";
-import styles from "./ProjectVisual.module.css";
 import pich from "../../public/projects/pich.png";
 import butler from "../../public/projects/butler.png";
 import salamly from "../../public/projects/salamly.png";
@@ -199,10 +198,10 @@ export const visuals: Record<number, Visual> = {
       { src: loveTwo, alt: "Love One Fish matching and swipe interface" },
       {
         src: loveThree,
-        alt: "Love One Fish interested-in-me list and discovery screen",
+        alt: "Love One Fish profile detail and photo highlights",
       },
     ],
-    background: "#16424a",
+    background: "#392237",
     format: "posters",
     caption: "App Store previews",
   },
@@ -210,89 +209,103 @@ export const visuals: Record<number, Visual> = {
     images: [
       {
         src: devotionalHome,
-        alt: "Daily Empowerment Android devotional dashboard and daily reading",
+        alt: "Daily Empowerment devotional dashboard and daily bread section",
       },
-      { src: devotionalBooks, alt: "Daily Empowerment Android book library" },
+      {
+        src: devotionalBooks,
+        alt: "Daily Empowerment publication categories and author titles",
+      },
       {
         src: devotionalDetail,
-        alt: "Daily Empowerment devotional article captured from the project demo",
+        alt: "Daily Empowerment reader with bookmarking and audio play",
       },
     ],
-    background: "#2d3c2c",
-    format: "screens",
-    caption: "App screens · Dashboard, books & devotional reading",
+    background: "#16424a",
+    format: "posters",
+    caption: "Google Play previews",
   },
   12: {
     images: [
       {
         src: worldOnPlateDesktop,
-        alt: "Live World on Plate desktop website showing recipe search, cuisine categories, and recipe cards",
+        alt: "World on Plate website exploring recipes by world map and region",
       },
       {
         src: worldOnPlateMobile,
-        alt: "Live World on Plate mobile website with recipe discovery and bottom navigation",
+        alt: "World on Plate mobile view of recipe discovery by map",
       },
     ],
-    background: "#34372b",
+    background: "#2d3c2c",
     format: "website",
-    caption: "Live website · Desktop & mobile",
+    caption: "Responsive web interface",
   },
   14: {
     images: [
       {
         src: bibleAlertOne,
-        alt: "Bible Alert home interface with daily Bible teachings and alerts",
+        alt: "Bible Alert daily scripture notifications and feed",
       },
       {
         src: bibleAlertTwo,
-        alt: "Bible Alert verse reader and reflection interface",
+        alt: "Bible Alert category selection and bookmarking",
       },
       {
         src: bibleAlertThree,
-        alt: "Bible Alert reminder and notification customization screen",
+        alt: "Bible Alert clean reading view with reflections",
       },
     ],
-    background: "#2a3d34",
-    format: "posters",
-    caption: "Mobile app · Quotes & alerts",
+    background: "#34372b",
+    format: "screens",
+    caption: "App Store previews",
   },
   15: {
     images: [
       {
         src: ramsonsOne,
-        alt: "Ramsons Delivery supermarket essentials and product catalog",
+        alt: "Ramsons retail catalog with product categories",
       },
       {
         src: ramsonsTwo,
-        alt: "Ramsons Delivery takeaway food ordering and dish selection",
+        alt: "Ramsons order placement and tracking interface",
       },
       {
         src: ramsonsThree,
-        alt: "Ramsons Delivery checkout and fast order dispatch",
+        alt: "Ramsons customer account and transaction history",
       },
     ],
-    background: "#3e2723",
-    format: "posters",
-    caption: "Mobile app · Supermarket & takeaway",
+    background: "#2a3d34",
+    format: "screens",
+    caption: "Mobile app interface",
   },
   16: {
     images: [
       {
         src: tengaiOne,
-        alt: "Tengai POS point-of-sale terminal and cashier checkout",
+        alt: "Tengai POS point of sale terminal with live order grid",
       },
       {
         src: tengaiTwo,
-        alt: "Tengai POS product inventory and stock management",
+        alt: "Tengai POS receipt generation and payment methods",
       },
       {
         src: tengaiThree,
-        alt: "Tengai POS sales reporting and transaction receipts",
+        alt: "Tengai POS inventory reconciliation and daily sales reports",
+      },
+    ],
+    background: "#3e2723",
+    format: "screens",
+    caption: "Google Play previews",
+  },
+  10: {
+    images: [
+      {
+        src: absher,
+        alt: "Absher mobile app presentation",
       },
     ],
     background: "#1f2937",
-    format: "posters",
-    caption: "Mobile & POS interface",
+    format: "composite",
+    caption: "Mobile app interface",
   },
 };
 
@@ -302,7 +315,7 @@ export default function ProjectVisual({
   featured = false,
   inDialog = false,
   priority = false,
-  showCaption = false,
+  showCaption = true,
 }: {
   id: number;
   compact?: boolean;
@@ -315,17 +328,17 @@ export default function ProjectVisual({
   if (!visual) return null;
   return (
     <figure
-      className={`${styles.visual} ${styles[visual.format]} ${
-        compact ? styles.compact : ""
-      } ${featured ? styles.featured : ""} ${inDialog ? styles.inDialog : ""} ${
-        id === 6 ? styles.abutWebsite : ""
+      className={`pv-visual pv-${visual.format} ${
+        compact ? "pv-compact" : ""
+      } ${featured ? "pv-featured" : ""} ${inDialog ? "pv-inDialog" : ""} ${
+        id === 6 ? "pv-abutWebsite" : ""
       }`}
       style={{ "--preview-bg": visual.background } as CSSProperties}
     >
       {visual.format === "websiteApps" ? (
-        <div className={styles.combinedStage}>
-          <div className={styles.laptopFrame}>
-            <div className={styles.laptopDisplay}>
+        <div className="pv-combinedStage">
+          <div className="pv-laptopFrame">
+            <div className="pv-laptopDisplay">
               <Image
                 src={visual.images[0].src}
                 alt={visual.images[0].alt}
@@ -341,9 +354,9 @@ export default function ProjectVisual({
           {visual.images.slice(1).map((image, index) => (
             <div
               key={image.alt}
-              className={`${styles.companionScreen} ${
-                index === 0 ? styles.companionLeft : styles.companionRight
-              } ${styles.phoneBezel}`}
+              className={`pv-companionScreen ${
+                index === 0 ? "pv-companionLeft" : "pv-companionRight"
+              } pv-phoneBezel`}
             >
               <Image
                 src={image.src}
@@ -355,15 +368,15 @@ export default function ProjectVisual({
           ))}
         </div>
       ) : visual.format === "website" ? (
-        <div className={styles.websiteStage}>
-          <div className={styles.browserFrame}>
-            <div className={styles.browserBar} aria-hidden="true">
-              <span className={styles.browserDots}>
+        <div className="pv-websiteStage">
+          <div className="pv-browserFrame">
+            <div className="pv-browserBar" aria-hidden="true">
+              <span className="pv-browserDots">
                 <i />
                 <i />
                 <i />
               </span>
-              <span className={styles.browserAddress}>worldonplate.com</span>
+              <span className="pv-browserAddress">worldonplate.com</span>
             </div>
             <Image
               src={visual.images[0].src}
@@ -371,7 +384,7 @@ export default function ProjectVisual({
               sizes="(max-width: 800px) 80vw, 520px"
             />
           </div>
-          <div className={styles.mobileFrame}>
+          <div className="pv-mobileFrame">
             <Image
               src={visual.images[1].src}
               alt={visual.images[1].alt}
@@ -381,11 +394,11 @@ export default function ProjectVisual({
         </div>
       ) : (
         <div
-          className={`${styles.stage} ${
+          className={`pv-stage ${
             visual.images.length > 2
-              ? styles.triple
+              ? "pv-triple"
               : visual.images.length > 1
-              ? styles.pair
+              ? "pv-pair"
               : ""
           }`}
         >
