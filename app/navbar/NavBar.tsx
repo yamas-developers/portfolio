@@ -50,6 +50,9 @@ export default function NavBar() {
           MK<span>.</span>
         </a>
         <div className="nav-links">
+          <a href="#introduction" onClick={() => onNavClick("introduction")}>
+            Introduction
+          </a>
           <a href="#work" onClick={() => onNavClick("work")}>
             Work
           </a>

@@ -26,7 +26,7 @@ import { captureEvent } from "../analytics/posthog";
 
 const SPEED = 22; // px per second
 const PHONE_SPEED = 30; // phones drift a little faster
-const FAST = 2; // px per ms; a downward scroll faster than this passes the board
+const FAST = 6.5; // px per ms; requires a deliberate fast downward flick to pass the board
 const MIN_MOVING_HEIGHT = 200; // lists shorter than this stay still
 const STARTS = [0, 0.42, 0.2, 0.62]; // where each list starts in its loop
 const PIN_BOTTOM_SPACE = 24; // slight margin below board to maximize content
@@ -226,7 +226,8 @@ function createEngine() {
     if (!zone || !board || !layout?.pinned) return;
     const box = zone.getBoundingClientRect();
     const { pinTop } = layout;
-    if (!state.passing && dy > 0 && state.speed > FAST) {
+    // Require a genuine high-velocity downward flick (dy > 40px) so normal/slow trackpad scrolling never triggers passing
+    if (!state.passing && dy > 40 && state.speed > FAST) {
       const approaching =
         box.top > pinTop && box.top - pinTop < window.innerHeight * 1.5;
       const pinnedNow =
@@ -485,6 +486,7 @@ export default function Feedback() {
   const [dialogReviews, setDialogReviews] = useState<FeedbackReview[] | null>(null);
   const [exploreOpen, setExploreOpen] = useState(false);
   const [announcement, setAnnouncement] = useState("");
+  const triggerRailShowcaseRef = useRef<(() => void) | null>(null);
 
   const list = useMemo(
     () =>
@@ -548,6 +550,58 @@ export default function Feedback() {
     };
     frame = requestAnimationFrame(loop);
 
+    // Automated Showcase Demo: smoothly drags the rail slider to demonstrate its interactive power
+    let showcaseDone = false;
+    let showcaseFrame = 0;
+    let showcaseTimer: ReturnType<typeof setTimeout> | null = null;
+
+    const triggerRailShowcase = () => {
+      if (!engine.state.columns.length || engine.state.drag) return;
+      const startT = performance.now();
+      const duration = 1800; // 1.8 seconds demo cycle
+      const travelDistance = 140; // px travel
+
+      let lastY = 0;
+      const animateDrag = (now: number) => {
+        if (engine.state.drag) {
+          return;
+        }
+        const elapsed = now - startT;
+        if (elapsed > duration) {
+          return;
+        }
+        // Smooth sine wave easing: 0 -> 1 -> 0
+        const progress = elapsed / duration;
+        const currentFraction = Math.sin(progress * Math.PI);
+        const currentY = currentFraction * travelDistance;
+        const delta = currentY - lastY;
+        lastY = currentY;
+
+        engine.state.shared += delta;
+        engine.drawAll();
+        showcaseFrame = requestAnimationFrame(animateDrag);
+      };
+      showcaseFrame = requestAnimationFrame(animateDrag);
+    };
+
+    triggerRailShowcaseRef.current = triggerRailShowcase;
+
+    const showcaseObserver = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !showcaseDone) {
+          showcaseDone = true;
+          showcaseTimer = setTimeout(() => {
+            if (engine.state.onScreen && !engine.state.drag) {
+              triggerRailShowcase();
+            }
+          }, 700);
+        }
+      },
+      { threshold: 0.25 }
+    );
+
+    if (engine.els.zone.current) showcaseObserver.observe(engine.els.zone.current);
+
     // The rail takes the wheel, so the page does not scroll under it.
     const rail = engine.els.rail.current;
     const onRailWheel = (e: WheelEvent) => {
@@ -565,10 +619,21 @@ export default function Feedback() {
       window.removeEventListener("scroll", engine.onScroll);
       document.removeEventListener("click", engine.onAnchorClick, true);
       observer.disconnect();
+      showcaseObserver.disconnect();
+      if (showcaseTimer) clearTimeout(showcaseTimer);
       cancelAnimationFrame(frame);
+      cancelAnimationFrame(showcaseFrame);
       rail?.removeEventListener("wheel", onRailWheel);
     };
   }, [engine]);
+
+  useEffect(() => {
+    const handleStickChange = () => {
+      setLayout(null);
+    };
+    window.addEventListener("feedback-stick-change", handleStickChange);
+    return () => window.removeEventListener("feedback-stick-change", handleStickChange);
+  }, []);
 
   // Measure in two passes: render the lists at their natural height, then
   // size the board from them and add the loop copies.
@@ -604,10 +669,19 @@ export default function Feedback() {
     // Wider screens map one full loop of the longest list onto the pinned
     // stretch (capped on very long boards). Phones move the lists 1:1 with
     // the finger over a shorter stretch.
+    // Dynamic stick intensity: controlled via toolbar slider (--feedback-pin-multiplier)
+    const pinMultiplierRaw =
+      typeof window !== "undefined"
+        ? parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--feedback-pin-multiplier"))
+        : 4.0;
+    const pinMultiplier = !isNaN(pinMultiplierRaw) && pinMultiplierRaw > 0
+      ? pinMultiplierRaw
+      : (viewport.wide ? 4.0 : PHONE_PIN_SCREENS);
+
     const pinDistance = pinned
       ? Math.min(
           cycle,
-          window.innerHeight * (viewport.wide ? 4 : PHONE_PIN_SCREENS)
+          window.innerHeight * pinMultiplier
         )
       : 0;
     setLayout({
@@ -875,6 +949,7 @@ export default function Feedback() {
                 aria-valuenow={0}
                 hidden={!moving}
                 onPointerDown={(e) => {
+                  e.currentTarget.classList.add("has-interacted");
                   const thumb = engine.els.thumb.current;
                   if (!engine.state.columns.length || !thumb) return;
                   e.preventDefault();
@@ -927,7 +1002,27 @@ export default function Feedback() {
                     </span>
                   ))}
                 </div>
-                <div ref={engine.els.thumb} className="rail-thumb" />
+                <div ref={engine.els.thumb} className="rail-thumb">
+                  {/* Animated Drag Showcase Hand Indicator */}
+                  <div
+                    className="rail-showcase-pointer"
+                    aria-label="Demonstrate dragging reviews slider"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      triggerRailShowcaseRef.current?.();
+                    }}
+                  >
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src="/slider-finger-drag.png"
+                      alt="Drag slider handle"
+                      className="showcase-finger-img"
+                      width={56}
+                      height={56}
+                      draggable={false}
+                    />
+                  </div>
+                </div>
               </div>
             </div>
 
