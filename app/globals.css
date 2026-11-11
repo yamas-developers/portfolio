@@ -22,28 +22,28 @@
 }
 
 :root {
-  --bg: #8d8071;
-  --surface: #f4ede2;
-  --paper: #faf6f0;
-  --ink: #181613;
+  --bg: #ebdccb;
+  --surface: #f7f1e7;
+  --paper: #fcf9f4;
+  --ink: #171512;
   --muted: #4e4438;
-  --line: #cec1af;
+  --line: #d8cdbe;
   --accent: #d8c6b0;
   --accent-ink: #2b2118;
   --soft: #e8ded2;
   --focus: #3b5828;
-  --board: #dfd3c2;
-  --glow: #e8d7c0;
+  --board: #e4d8c7;
+  --glow: #eddac3;
   --frame: #362e26;
   --card-shadow: rgba(45, 38, 30, 0.12);
   --radius: 20px;
   --bg-glass-blur: 20px;
   --bg-glass-fill: rgba(247, 241, 232, 0.04);
   --card-glass-blur: 20px;
-  --card-glass-fill: rgba(248, 242, 232, 0.58);
-  --slab-fill-top: rgba(250, 245, 236, 0.72);
-  --slab-fill-bottom: rgba(234, 224, 208, 0.48);
-  --mini-card-fill: rgba(255, 255, 255, 0.65);
+  --card-glass-fill: rgba(255, 252, 246, 0.62);
+  --slab-fill-top: rgba(255, 252, 246, 0.76);
+  --slab-fill-bottom: rgba(242, 234, 222, 0.50);
+  --mini-card-fill: rgba(255, 255, 255, 0.70);
   --portrait-fill: rgba(255, 255, 255, 0.25);
   --card-glass-border: rgba(255, 255, 255, 0.88);
   --card-glass-specular: inset 0 2px 2.5px 0 rgba(255, 255, 255, 0.95), inset 0 0 35px 0 rgba(255, 255, 255, 0.20);
@@ -52,9 +52,9 @@
   --mesh-contrast: 1.05;
   --mesh-saturate: 1.12;
   --ambient-opacity: 1.0;
-  --glass-fill: rgba(141, 128, 113, 0);
-  --glass-header-fill: rgba(246, 240, 231, 0.82);
-  --landing-glass-fill: rgba(141, 128, 113, 0);
+  --glass-fill: rgba(235, 220, 203, 0);
+  --glass-header-fill: rgba(248, 242, 233, 0.82);
+  --landing-glass-fill: rgba(235, 220, 203, 0);
   --glass-border: rgba(255, 255, 255, 0.85);
   --glass-specular: rgba(255, 255, 255, 0.75);
   --glass-blur: 9px;
@@ -64,7 +64,7 @@
   --stream-speed-up: 46s;
   --stream-speed-down: 52s;
   color-scheme: light;
-  scrollbar-color: #9c8e7e var(--bg);
+  scrollbar-color: #a89a88 var(--bg);
 }
 
 :root[data-theme="dark"] {
@@ -257,22 +257,22 @@ h3 {
   pointer-events: none;
   z-index: 0;
   overflow: hidden;
-  background-color: #8d8071;
+  background-color: #ebdccb;
   background-image:
     /* 1. Top-left: Fresh cilantro & herb sage green */
-    radial-gradient(circle 720px at 10% 6%, rgba(78, 118, 54, 0.85) 0%, rgba(115, 142, 92, 0.55) 35%, rgba(135, 148, 120, 0.25) 58%, transparent 75%),
-    /* 2. Top-center: Luminous warm ivory / champagne ambient light */
-    radial-gradient(circle 920px at 50% 10%, rgba(235, 215, 188, 0.95) 0%, rgba(212, 185, 152, 0.68) 38%, rgba(182, 152, 122, 0.28) 65%, transparent 80%),
-    /* 3. Center-right: Warm roasted terracotta / grilled salmon glow */
-    radial-gradient(circle 760px at 78% 44%, rgba(216, 124, 62, 0.72) 0%, rgba(188, 98, 44, 0.44) 38%, rgba(144, 72, 30, 0.18) 65%, transparent 75%),
+    radial-gradient(circle 760px at 12% 8%, rgba(88, 128, 64, 0.78) 0%, rgba(130, 155, 108, 0.45) 35%, rgba(160, 172, 146, 0.20) 58%, transparent 75%),
+    /* 2. Top-center & Center: Radiant luminous warm ivory / champagne ambient light */
+    radial-gradient(circle 960px at 50% 12%, rgba(255, 248, 238, 0.95) 0%, rgba(242, 226, 206, 0.72) 36%, rgba(220, 196, 170, 0.35) 62%, transparent 80%),
+    /* 3. Center-right: Warm roasted terracotta / golden salmon glow */
+    radial-gradient(circle 760px at 78% 42%, rgba(224, 134, 76, 0.68) 0%, rgba(200, 112, 58, 0.40) 38%, rgba(160, 88, 44, 0.16) 65%, transparent 75%),
     /* 4. Top-right: Deep smoky earthy olive & dark peppercorn */
-    radial-gradient(circle 800px at 94% 8%, rgba(56, 52, 42, 0.92) 0%, rgba(82, 74, 58, 0.65) 40%, rgba(108, 94, 74, 0.25) 70%, transparent 80%),
-    /* 5. Bottom-left: Soft sage olive glow */
-    radial-gradient(circle 680px at 8% 86%, rgba(104, 118, 88, 0.78) 0%, rgba(132, 144, 115, 0.48) 40%, transparent 70%),
+    radial-gradient(circle 800px at 94% 6%, rgba(68, 62, 50, 0.75) 0%, rgba(95, 85, 68, 0.48) 40%, rgba(125, 110, 90, 0.20) 70%, transparent 80%),
+    /* 5. Bottom-left: Soft culinary sage olive */
+    radial-gradient(circle 680px at 8% 88%, rgba(115, 132, 98, 0.65) 0%, rgba(142, 156, 126, 0.38) 40%, transparent 70%),
     /* 6. Bottom-center: Warm toasted sand & gourmet terracotta */
-    radial-gradient(circle 800px at 48% 88%, rgba(195, 162, 132, 0.82) 0%, rgba(165, 130, 104, 0.52) 42%, rgba(128, 94, 72, 0.20) 70%, transparent 80%),
-    /* 7. Bottom-right: Deep roasted espresso / charcoal shadow */
-    radial-gradient(circle 760px at 92% 92%, rgba(58, 44, 36, 0.90) 0%, rgba(84, 65, 52, 0.55) 45%, rgba(36, 28, 24, 0.25) 70%, transparent 80%);
+    radial-gradient(circle 800px at 48% 88%, rgba(205, 170, 140, 0.65) 0%, rgba(175, 138, 112, 0.42) 42%, rgba(135, 102, 78, 0.18) 70%, transparent 80%),
+    /* 7. Bottom-right: Deep roasted espresso / charred wood shadow */
+    radial-gradient(circle 760px at 92% 92%, rgba(70, 52, 40, 0.82) 0%, rgba(96, 74, 58, 0.45) 45%, rgba(45, 34, 28, 0.20) 70%, transparent 80%);
   filter: contrast(var(--mesh-contrast, 1.05)) saturate(var(--mesh-saturate, 1.12));
   opacity: var(--ambient-opacity, 1.0);
   transition: opacity 300ms ease, filter 300ms ease;
@@ -295,8 +295,48 @@ h3 {
   content: "";
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse at 50% 40%, transparent 45%, rgba(18, 28, 20, 0.26) 100%);
+  background: radial-gradient(ellipse at 50% 45%, transparent 52%, rgba(45, 38, 30, 0.18) 100%);
   pointer-events: none;
+}
+
+/* LAYER 0.5: Static Gourmet Botanical & Spices Layer (Zero GPU Blur Overhead, pure hardware compositing) */
+.ambient-culinary-accents {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.culinary-herb-top {
+  position: absolute;
+  top: 0;
+  left: max(2vw, calc(50% - 620px));
+  width: min(320px, 34vw);
+  height: auto;
+  opacity: 0.95;
+  filter: drop-shadow(0 14px 26px rgba(40, 50, 35, 0.22));
+  transform-origin: top left;
+  user-select: none;
+  pointer-events: none;
+}
+
+.culinary-herb-right {
+  position: absolute;
+  top: 35vh;
+  right: max(1vw, calc(50% - 610px));
+  width: min(130px, 15vw);
+  height: auto;
+  opacity: 0.90;
+  filter: drop-shadow(0 12px 22px rgba(40, 50, 35, 0.18));
+  user-select: none;
+  pointer-events: none;
+}
+
+:root[data-theme="dark"] .culinary-herb-top,
+:root[data-theme="dark"] .culinary-herb-right {
+  opacity: 0.78;
+  filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.60)) brightness(0.90);
 }
 
 .site-ambient-mesh .mesh-orb-1,
@@ -582,23 +622,56 @@ main#main {
 }
 
 .slab-capsule-btn {
-  background: #18281f !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 10px !important;
+  background: #151e18 !important;
   color: #ffffff !important;
   border-radius: 999px !important;
-  padding: 14px 30px !important;
+  padding: 14px 32px !important;
   font-weight: 700 !important;
-  box-shadow: 0 10px 25px -4px rgba(24, 43, 34, 0.35) !important;
-  transition: transform 180ms ease, box-shadow 180ms ease !important;
+  letter-spacing: -0.01em !important;
+  box-shadow: 0 10px 24px -4px rgba(21, 30, 24, 0.35) !important;
+  transition: transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 220ms cubic-bezier(0.2, 0.8, 0.2, 1), background-color 200ms ease !important;
+  cursor: pointer;
 }
 
 :root[data-theme="dark"] .slab-capsule-btn {
   background: #d4edaa !important;
   color: #111b16 !important;
-  box-shadow: 0 10px 25px -4px rgba(212, 237, 170, 0.35) !important;
+  box-shadow: 0 10px 24px -4px rgba(212, 237, 170, 0.28) !important;
 }
 
 .slab-capsule-btn:hover {
-  transform: translateY(-2px);
+  transform: translateY(-2.5px) !important;
+  box-shadow: 0 18px 36px -4px rgba(21, 30, 24, 0.45) !important;
+  background: #0f1612 !important;
+}
+
+:root[data-theme="dark"] .slab-capsule-btn:hover {
+  background: #e1f4be !important;
+  box-shadow: 0 18px 36px -4px rgba(212, 237, 170, 0.40) !important;
+}
+
+.slab-capsule-btn:active {
+  transform: translateY(0.5px) scale(0.98) !important;
+  box-shadow: 0 6px 14px -2px rgba(21, 30, 24, 0.30) !important;
+}
+
+/* Arrow micro-interactions for capsule buttons */
+.slab-btn-arrow {
+  display: inline-block;
+  transition: transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  will-change: transform;
+}
+
+.slab-capsule-btn:hover .slab-btn-arrow-down {
+  transform: translateY(3px);
+}
+
+.slab-capsule-btn:hover .slab-btn-arrow-up-right {
+  transform: translate(2.5px, -2.5px);
 }
 
 .slab-secondary-btn {
@@ -2889,6 +2962,44 @@ h2 {
   margin-top: 24px;
 }
 
+.contact-action .contact-capsule-btn {
+  margin-top: 24px;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 10px !important;
+  background: #151e18 !important;
+  color: #ffffff !important;
+  border-radius: 999px !important;
+  padding: 14px 32px !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.01em !important;
+  box-shadow: 0 10px 24px -4px rgba(21, 30, 24, 0.35) !important;
+  transition: transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 220ms cubic-bezier(0.2, 0.8, 0.2, 1), background-color 200ms ease !important;
+}
+
+:root[data-theme="dark"] .contact-action .contact-capsule-btn {
+  background: #d4edaa !important;
+  color: #111b16 !important;
+  box-shadow: 0 10px 24px -4px rgba(212, 237, 170, 0.28) !important;
+}
+
+.contact-action .contact-capsule-btn:hover {
+  transform: translateY(-2.5px) !important;
+  box-shadow: 0 18px 36px -4px rgba(21, 30, 24, 0.45) !important;
+  background: #0f1612 !important;
+}
+
+:root[data-theme="dark"] .contact-action .contact-capsule-btn:hover {
+  background: #e1f4be !important;
+  box-shadow: 0 18px 36px -4px rgba(212, 237, 170, 0.40) !important;
+}
+
+.contact-action .contact-capsule-btn:active {
+  transform: translateY(0.5px) scale(0.98) !important;
+  box-shadow: 0 6px 14px -2px rgba(21, 30, 24, 0.30) !important;
+}
+
 .contact-action .fiverr-note {
   font-size: 12px;
   line-height: 1.6;
@@ -3596,12 +3707,12 @@ h2 {
   /* 1. Gourmet Culinary Ambient Mesh on Mobile */
   .site-ambient-mesh {
     background:
-      radial-gradient(circle 420px at 12% 6%, rgba(78, 118, 54, 0.85) 0%, rgba(115, 142, 92, 0.55) 35%, transparent 70%),
-      radial-gradient(circle 480px at 50% 10%, rgba(235, 215, 188, 0.95) 0%, rgba(212, 185, 152, 0.68) 40%, transparent 75%),
-      radial-gradient(circle 440px at 85% 38%, rgba(216, 124, 62, 0.72) 0%, rgba(188, 98, 44, 0.44) 40%, transparent 70%),
-      radial-gradient(circle 420px at 10% 80%, rgba(104, 118, 88, 0.78) 0%, rgba(132, 144, 115, 0.48) 40%, transparent 70%),
-      radial-gradient(circle 450px at 88% 90%, rgba(58, 44, 36, 0.90) 0%, rgba(84, 65, 52, 0.55) 45%, transparent 75%),
-      #8d8071;
+      radial-gradient(circle 420px at 12% 6%, rgba(88, 128, 64, 0.78) 0%, rgba(130, 155, 108, 0.45) 35%, transparent 70%),
+      radial-gradient(circle 480px at 50% 10%, rgba(255, 248, 238, 0.95) 0%, rgba(242, 226, 206, 0.72) 40%, transparent 75%),
+      radial-gradient(circle 440px at 85% 38%, rgba(224, 134, 76, 0.68) 0%, rgba(200, 112, 58, 0.40) 40%, transparent 70%),
+      radial-gradient(circle 420px at 10% 80%, rgba(115, 132, 98, 0.65) 0%, rgba(142, 156, 126, 0.38) 40%, transparent 70%),
+      radial-gradient(circle 450px at 88% 90%, rgba(70, 52, 40, 0.82) 0%, rgba(96, 74, 58, 0.45) 45%, transparent 75%),
+      #ebdccb;
     filter: contrast(var(--mesh-contrast, 1.05)) saturate(var(--mesh-saturate, 1.12)) !important;
   }
 

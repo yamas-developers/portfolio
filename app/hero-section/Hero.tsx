@@ -42,7 +42,7 @@ export default function Hero() {
                 href="#work"
                 onClick={() => captureEvent("view_work_click", { location: "hero" })}
               >
-                View work <span aria-hidden="true">↗</span>
+                View work <span aria-hidden="true" className="slab-btn-arrow slab-btn-arrow-down">↓</span>
               </a>
               <a
                 className="button secondary slab-secondary-btn"

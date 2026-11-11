@@ -23,7 +23,7 @@ export default function Contact() {
           Tell me what you’re building, where you need help, and your timeline.
         </p>
         <a
-          className="button primary"
+          className="button primary slab-capsule-btn contact-capsule-btn"
           href={projectEmailHref}
           onClick={() => {
             triggerEmailToast();
@@ -33,7 +33,7 @@ export default function Contact() {
             });
           }}
         >
-          Discuss a project <span aria-hidden="true">↗</span>
+          Discuss a project <span aria-hidden="true" className="slab-btn-arrow slab-btn-arrow-up-right">↗</span>
         </a>
         <p className="fiverr-note">
           Visiting from Fiverr? Please continue in our Fiverr chat.
