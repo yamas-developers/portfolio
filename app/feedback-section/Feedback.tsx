@@ -496,7 +496,13 @@ export default function Feedback() {
     [filter]
   );
   const lists = clamp(viewport.lists, 1, Math.max(1, list.length));
-  const groups = useMemo(() => distribute(list, lists), [list, lists]);
+  // On 1-column mobile viewports, cap the moving loop to 28 cards (~5,400px per set, matching desktop's ~24 cards/col)
+  // so mobile WebKit never allocates a 64,000px-tall single-column strip, while keeping all 97 reviews in dialogs/counts.
+  const boardList = useMemo(
+    () => (!viewport.wide && lists === 1 ? list.slice(0, 28) : list),
+    [list, viewport.wide, lists]
+  );
+  const groups = useMemo(() => distribute(boardList, lists), [boardList, lists]);
   const showing =
     filter === "all"
       ? `Showing all ${list.length} reviews`
@@ -538,6 +544,7 @@ export default function Feedback() {
 
     const observer = new IntersectionObserver(([entry]) => {
       engine.state.onScreen = entry.isIntersecting;
+      engine.els.wall.current?.classList.toggle("is-offscreen", !entry.isIntersecting);
     });
     if (engine.els.wall.current) observer.observe(engine.els.wall.current);
 
@@ -710,6 +717,7 @@ export default function Feedback() {
     const reading = active !== null || exploreOpen;
     engine.state.reading = reading;
     document.body.style.overflow = reading ? "hidden" : "";
+    document.documentElement.classList.toggle("is-modal-open", reading);
   }, [engine, active, exploreOpen]);
 
   const changeFilter = (next: Filter) => {

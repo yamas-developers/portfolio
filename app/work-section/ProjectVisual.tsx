@@ -382,6 +382,7 @@ export default function ProjectVisual({
               src={visual.images[0].src}
               alt={visual.images[0].alt}
               sizes="(max-width: 800px) 80vw, 520px"
+              priority={priority}
             />
           </div>
           <div className="pv-mobileFrame">
@@ -389,6 +390,7 @@ export default function ProjectVisual({
               src={visual.images[1].src}
               alt={visual.images[1].alt}
               sizes="(max-width: 540px) 26vw, 140px"
+              priority={priority}
             />
           </div>
         </div>

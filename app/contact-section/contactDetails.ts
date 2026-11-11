@@ -1,4 +1,4 @@
-export const projectEmail = "muhamad.khizr@gmail.com";
+export const projectEmail = "khizr@khizr.net";
 
 export const projectEmailHref =
   `mailto:${projectEmail}?subject=Let%27s%20work%20together`;

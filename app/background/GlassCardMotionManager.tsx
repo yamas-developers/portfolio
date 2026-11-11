@@ -3,28 +3,19 @@
 import { useEffect } from "react";
 
 /**
- * Universal 3D Perspective Tilt, Specular Glare, and Revolving 3D Cylinder Scroll Manager
- * 1. Interactive 3D hover physics on ALL glass cards (including Work & Experience headers).
- * 2. 3D Revolving Cylinder Scroll: tilts cards as they travel through the viewport circle.
+ * Universal Interactive 3D Perspective Tilt & Specular Glare Physics
+ * - Provides real-time 3D tilt, depth, and physical specular glare when hovering over any glass card.
+ * - Zero scroll listeners or scroll-time transform mutations, allowing 100% native 60/120fps hardware scrolling.
  */
 export default function GlassCardMotionManager() {
   useEffect(() => {
     if (typeof window === "undefined") return;
-
-    // Mobile / touch safety check: phones and touch tablets should use 100% native hardware scrolling
-    // without heavy JS scroll listeners, 3D perspective transforms, or layout thrashing that cause WebKit GPU crashes.
-    const isTouchOrMobile =
-      window.matchMedia("(hover: none)").matches ||
-      window.matchMedia("(max-width: 768px)").matches ||
-      "ontouchstart" in window;
-
-    if (isTouchOrMobile) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     let activeCard: HTMLElement | null = null;
     let cardRect: DOMRect | null = null;
     let glareEl: HTMLElement | null = null;
     let rafMoveId: number | null = null;
-    let rafScrollId: number | null = null;
 
     const findGlassCard = (target: EventTarget | null): HTMLElement | null => {
       if (!(target instanceof HTMLElement)) return null;
@@ -33,57 +24,15 @@ export default function GlassCardMotionManager() {
       );
     };
 
-    // Calculate natural revolving cylindrical transform based on scroll position
-    const getRevolvingTransform = (el: HTMLElement): string => {
-      const isRevolving = document.documentElement.dataset.revolvingScroll !== "off";
-      if (!isRevolving) return "perspective(1200px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)";
-
-      const rect = el.getBoundingClientRect();
-      const viewCenter = window.innerHeight / 2;
-      const elCenter = rect.top + rect.height / 2;
-      const normOffset = (elCenter - viewCenter) / (window.innerHeight * 0.75);
-      const clamped = Math.max(-1.25, Math.min(1.25, normOffset));
-
-      const isLarge =
-        el.classList.contains("hero-glass-slab") ||
-        el.classList.contains("contact-section") ||
-        el.classList.contains("feedback-heading");
-
-      const maxDeg = isLarge ? 7.5 : 11;
-      const rotX = (clamped * maxDeg).toFixed(2);
-      const sc = (1 - Math.abs(clamped) * 0.035).toFixed(3);
-      const tz = (Math.abs(clamped) * -22).toFixed(1);
-
-      return `perspective(1400px) rotateX(${rotX}deg) scale3d(${sc}, ${sc}, ${sc}) translateZ(${tz}px)`;
-    };
-
-    const updateAllRevolvingTransforms = () => {
-      const isRevolving = document.documentElement.dataset.revolvingScroll !== "off";
-      const cards = document.querySelectorAll<HTMLElement>(
-        ".hero-glass-slab, .feedback-heading, .work-heading, .about-intro, .contact-section, .footer-glass-card, .project-card, .about-section .capabilities > div, .work-section.glass-slab-outer, .about-section.glass-slab-outer"
-      );
-
-      cards.forEach((card) => {
-        if (card === activeCard) return; // Don't override currently hovered card
-        if (isRevolving) {
-          card.style.transform = getRevolvingTransform(card);
-          card.style.transition = "transform 140ms ease-out, box-shadow 200ms ease";
-        } else {
-          card.style.transform = "perspective(1200px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)";
-          card.style.transition = "transform 400ms ease-out, box-shadow 200ms ease";
-        }
-      });
-    };
-
     const resetCard = (card: HTMLElement) => {
-      card.style.transform = getRevolvingTransform(card);
-      card.style.transition = "transform 650ms cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 300ms ease";
+      card.style.transform = "perspective(1200px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)";
+      card.style.transition = "transform 350ms cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 300ms ease";
       const glare = card.querySelector<HTMLElement>(".glass-card-glare");
       if (glare) glare.style.opacity = "0";
     };
 
     const handlePointerOver = (e: PointerEvent) => {
-      if (window.matchMedia("(hover: none)").matches) return;
+      if (e.pointerType !== "mouse" || window.matchMedia("(hover: none)").matches) return;
       const card = findGlassCard(e.target);
       if (!card) return;
 
@@ -103,7 +52,7 @@ export default function GlassCardMotionManager() {
     };
 
     const handlePointerMove = (e: PointerEvent) => {
-      if (!activeCard || window.matchMedia("(hover: none)").matches) return;
+      if (!activeCard || e.pointerType !== "mouse" || window.matchMedia("(hover: none)").matches) return;
 
       const rawIntensity = getComputedStyle(document.documentElement)
         .getPropertyValue("--card-motion-intensity")
@@ -168,30 +117,15 @@ export default function GlassCardMotionManager() {
       }
     };
 
-    const handleScroll = () => {
-      if (rafScrollId) cancelAnimationFrame(rafScrollId);
-      rafScrollId = requestAnimationFrame(() => {
-        updateAllRevolvingTransforms();
-      });
-    };
-
-    // Initial update
-    updateAllRevolvingTransforms();
-
     document.addEventListener("pointerover", handlePointerOver, { passive: true });
     document.addEventListener("pointermove", handlePointerMove, { passive: true });
     document.addEventListener("pointerout", handlePointerOut, { passive: true });
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    window.addEventListener("resize", handleScroll, { passive: true });
 
     return () => {
       if (rafMoveId) cancelAnimationFrame(rafMoveId);
-      if (rafScrollId) cancelAnimationFrame(rafScrollId);
       document.removeEventListener("pointerover", handlePointerOver);
       document.removeEventListener("pointermove", handlePointerMove);
       document.removeEventListener("pointerout", handlePointerOut);
-      window.removeEventListener("scroll", handleScroll);
-      window.removeEventListener("resize", handleScroll);
     };
   }, []);
 
