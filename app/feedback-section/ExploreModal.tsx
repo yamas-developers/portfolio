@@ -87,7 +87,9 @@ export default function ExploreModal({
       : feedbackReviews.filter((r) => r.platform === filter);
 
   const cols = exploreColsCount(currentReviews.length, windowWidth);
-  const groups = distribute(currentReviews, cols);
+  const displayReviews =
+    cols === 1 && autoScroll ? currentReviews.slice(0, 32) : currentReviews;
+  const groups = distribute(displayReviews, cols);
 
   // Dialog open/close sync
   useEffect(() => {
@@ -215,9 +217,31 @@ export default function ExploreModal({
       col.track.style.transform = `translate3d(0, ${(-y).toFixed(2)}px, 0)`;
     };
 
+    let touchCol: ExploreColumn | null = null;
+    let lastTouchY = 0;
+    const onTouchStart = (e: TouchEvent) => {
+      if (!autoScroll || !columnsRef.current.length || !e.touches.length) return;
+      const target = e.target as HTMLElement | null;
+      const colEl = target?.closest(".explore-col");
+      touchCol = (colEl && columnsRef.current.find((c) => c.el === colEl)) || columnsRef.current[0] || null;
+      lastTouchY = e.touches[0].clientY;
+    };
+
+    const onTouchMove = (e: TouchEvent) => {
+      if (!autoScroll || !touchCol || !e.touches.length) return;
+      const currentY = e.touches[0].clientY;
+      const dy = lastTouchY - currentY;
+      lastTouchY = currentY;
+      touchCol.drift += dy * 1.1;
+      const y = touchCol.length + wrap(touchCol.start + touchCol.drift, touchCol.length);
+      touchCol.track.style.transform = `translate3d(0, ${(-y).toFixed(2)}px, 0)`;
+    };
+
     wall.addEventListener("pointerover", onPointerOver);
     wall.addEventListener("pointerout", onPointerOut);
     wall.addEventListener("wheel", onWheel, { passive: true });
+    wall.addEventListener("touchstart", onTouchStart, { passive: true });
+    wall.addEventListener("touchmove", onTouchMove, { passive: true });
 
     // RAF Loop
     lastTimeRef.current = performance.now();
@@ -249,6 +273,8 @@ export default function ExploreModal({
       wall.removeEventListener("pointerover", onPointerOver);
       wall.removeEventListener("pointerout", onPointerOut);
       wall.removeEventListener("wheel", onWheel);
+      wall.removeEventListener("touchstart", onTouchStart);
+      wall.removeEventListener("touchmove", onTouchMove);
     };
   }, [open, autoScroll, currentReviews.length, filter, windowWidth]);
 

@@ -11,7 +11,7 @@ export default function GlassPortraitCard() {
   const [glarePos, setGlarePos] = useState({ x: 50, y: 50, opacity: 0 });
 
   const handlePointerMove = (e: PointerEvent<HTMLDivElement>) => {
-    if (typeof window !== "undefined" && window.matchMedia("(hover: none)").matches) return;
+    if (e.pointerType !== "mouse" || (typeof window !== "undefined" && window.matchMedia("(hover: none)").matches)) return;
     const card = cardRef.current;
     if (!card) return;
 
@@ -50,7 +50,8 @@ export default function GlassPortraitCard() {
     });
   };
 
-  const handlePointerEnter = () => {
+  const handlePointerEnter = (e: PointerEvent<HTMLDivElement>) => {
+    if (e.pointerType !== "mouse") return;
     setIsHovered(true);
   };
 
@@ -99,7 +100,7 @@ export default function GlassPortraitCard() {
             className="portrait glass-portrait-img"
             alt="Muhammad Khizr"
             priority
-            sizes="(max-width: 767px) 64px, (max-width: 1000px) 190px, 240px"
+            sizes="(max-width: 767px) 190px, (max-width: 1024px) 220px, 280px"
           />
         </div>
       </div>

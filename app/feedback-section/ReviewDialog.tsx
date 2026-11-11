@@ -1,6 +1,6 @@
 "use client";
 
-import { Dispatch, SetStateAction, useEffect, useRef } from "react";
+import { Dispatch, SetStateAction, useEffect, useMemo, useRef } from "react";
 import { FeedbackReview } from "./feedbackReviews";
 import { highlightQuote, stars } from "./feedbackText";
 import { captureEvent } from "../analytics/posthog";
@@ -195,6 +195,17 @@ export default function ReviewDialog({
   const current = active ? reviews[active.index] : null;
   const previous = active ? reviews[(active.index - 1 + total) % total] : null;
   const next = active ? reviews[(active.index + 1) % total] : null;
+  const longestReview = useMemo(
+    () =>
+      reviews.reduce<FeedbackReview | null>(
+        (longest, r) =>
+          !longest || r.quote.length + r.tags.join(" ").length > longest.quote.length + longest.tags.join(" ").length
+            ? r
+            : longest,
+        null
+      ),
+    [reviews]
+  );
 
   return (
     <dialog
@@ -279,30 +290,26 @@ export default function ReviewDialog({
           >
             <Neighbor review={previous} direction={-1} onClick={() => step(-1)} />
 
-            {/* Every review sits in the same cell, hidden but for the active
-                one, so the cell is as tall as the longest review. The card
-                fits its own text, the popup keeps one size, and Prev / Next
-                stay where they are. */}
+            {/* The longest review sits hidden in the same grid cell as the active
+                review so the popup keeps one steady size and Prev / Next never shift,
+                without mounting 96 redundant DOM subtrees. */}
             <div className="carousel-slot">
-              {reviews.map((review, index) =>
-                index === active.index ? (
-                  <article
-                    key={review.id}
-                    className={`carousel-active-card slide-${active.direction}`}
-                    aria-live="polite"
-                  >
-                    <ReviewBody review={review} titleId="review-title" />
-                  </article>
-                ) : (
-                  <article
-                    key={review.id}
-                    className="carousel-active-card is-spacer"
-                    aria-hidden="true"
-                  >
-                    <ReviewBody review={review} />
-                  </article>
-                )
+              {longestReview && longestReview.id !== current.id && (
+                <article
+                  key={`spacer-${longestReview.id}`}
+                  className="carousel-active-card is-spacer"
+                  aria-hidden="true"
+                >
+                  <ReviewBody review={longestReview} />
+                </article>
               )}
+              <article
+                key={current.id}
+                className={`carousel-active-card slide-${active.direction}`}
+                aria-live="polite"
+              >
+                <ReviewBody review={current} titleId="review-title" />
+              </article>
             </div>
 
             <Neighbor review={next} direction={1} onClick={() => step(1)} />
