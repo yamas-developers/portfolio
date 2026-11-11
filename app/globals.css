@@ -299,46 +299,6 @@ h3 {
   pointer-events: none;
 }
 
-/* LAYER 0.5: Static Gourmet Botanical & Spices Layer (Zero GPU Blur Overhead, pure hardware compositing) */
-.ambient-culinary-accents {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
-  overflow: hidden;
-}
-
-.culinary-herb-top {
-  position: absolute;
-  top: 0;
-  left: max(2vw, calc(50% - 620px));
-  width: min(320px, 34vw);
-  height: auto;
-  opacity: 0.95;
-  filter: drop-shadow(0 14px 26px rgba(40, 50, 35, 0.22));
-  transform-origin: top left;
-  user-select: none;
-  pointer-events: none;
-}
-
-.culinary-herb-right {
-  position: absolute;
-  top: 35vh;
-  right: max(1vw, calc(50% - 610px));
-  width: min(130px, 15vw);
-  height: auto;
-  opacity: 0.90;
-  filter: drop-shadow(0 12px 22px rgba(40, 50, 35, 0.18));
-  user-select: none;
-  pointer-events: none;
-}
-
-:root[data-theme="dark"] .culinary-herb-top,
-:root[data-theme="dark"] .culinary-herb-right {
-  opacity: 0.78;
-  filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.60)) brightness(0.90);
-}
-
 .site-ambient-mesh .mesh-orb-1,
 .site-ambient-mesh .mesh-orb-2,
 .site-ambient-mesh .mesh-orb-3,
